@@ -150,6 +150,72 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://127.0.0.1:8080/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="瀚中子">
+      <meta itemprop="description" content="Linux运维笔记，程序员学习分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linux高级运维工程师之路">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/" class="post-title-link" itemprop="url">leetcode_1俩数之和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-07 17:03:02 / 修改时间：17:04:10" itemprop="dateCreated datePublished" datetime="2020-07-07T17:03:02+08:00">2020-07-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>#问题描述：<br>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。<br>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。<br>示例:<br>给定 nums = [2, 7, 11, 15], target = 9<br>因为 nums[0] + nums[1] = 2 + 7 = 9<br>所以返回 [0, 1]</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/two-sum" target="_blank" rel="noopener">https://leetcode-cn.com/problems/two-sum</a></p>
+<h3 id="第一版答案："><a href="#第一版答案：" class="headerlink" title="第一版答案："></a>第一版答案：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">twoSum</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        reList = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(nums)):</span><br><span class="line">                <span class="keyword">if</span>(nums[i]+nums[j] == target):</span><br><span class="line">                    reList.append(i)</span><br><span class="line">                    reList.append(j)    </span><br><span class="line">        <span class="keyword">return</span> reList</span><br></pre></td></tr></table></figure>
+<p>执行用时：3672 ms, 在所有 Python 提交中击败了14.63% 的用户<br>内存消耗：13.6 MB, 在所有 Python 提交中击败了6.17% 的用户</p>
+<hr>
+<h3 id="第二版答案"><a href="#第二版答案" class="headerlink" title="第二版答案"></a>第二版答案</h3><h4 id="改进原因：因为上面的时间复杂度是O-n-2-不满意"><a href="#改进原因：因为上面的时间复杂度是O-n-2-不满意" class="headerlink" title="改进原因：因为上面的时间复杂度是O(n^2),不满意"></a>改进原因：因为上面的时间复杂度是O(n^2),不满意</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:</span><br><span class="line">        reList &#x3D; set()</span><br><span class="line">        nums2&#x3D;nums</span><br><span class="line">        for k,v in enumerate(nums):</span><br><span class="line">                nums2[k]&#x3D;&#39;A&#39;</span><br><span class="line">                if target-v in nums2  :</span><br><span class="line">                    reList.add(k)    </span><br><span class="line">                nums2[k]&#x3D;v</span><br><span class="line">        reList1&#x3D;list(reList)</span><br><span class="line">        return reList1</span><br></pre></td></tr></table></figure>
+
+<p>这样也能通过，且时间复杂度为 O(n)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://127.0.0.1:8080/2020/07/07/kubernetes%E6%90%AD%E5%BB%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -479,12 +545,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
