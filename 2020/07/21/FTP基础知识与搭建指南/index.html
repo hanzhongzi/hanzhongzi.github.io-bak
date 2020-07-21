@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"127.0.0.1","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="FTP协议及FTP服务器搭建File Transfer Protocol 文件传输协议 ，应用层协议—-RFC959 传输效率高，在网络上传输大文件一般也采用该协议 FTP架构—-C&#x2F;S： 1.服务器  用于存储数据  2.客户端  用户通过客户端使用FTP协议登录、访问数据、下载数据   使用端口： 20： 用于主动模式的数据传输 21：用于传输控制信息 被动模式传输数据的端口试服务器与客户端协">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FTP基础知识与搭建指南">
+<meta property="og:url" content="http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Linux高级运维工程师之路">
+<meta property="og:description" content="FTP协议及FTP服务器搭建File Transfer Protocol 文件传输协议 ，应用层协议—-RFC959 传输效率高，在网络上传输大文件一般也采用该协议 FTP架构—-C&#x2F;S： 1.服务器  用于存储数据  2.客户端  用户通过客户端使用FTP协议登录、访问数据、下载数据   使用端口： 20： 用于主动模式的数据传输 21：用于传输控制信息 被动模式传输数据的端口试服务器与客户端协">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-21T12:31:02.000Z">
+<meta property="article:modified_time" content="2020-07-21T12:32:26.077Z">
+<meta property="article:author" content="瀚中子">
+<meta property="article:tag" content="FTP基础知识 FTP搭建 FTP保姆级教学 FTP配置文件 FTP自定义用户">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FTP基础知识与搭建指南 | Linux高级运维工程师之路</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Linux高级运维工程师之路</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">云毕业的瀚中子</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="瀚中子">
+      <meta itemprop="description" content="Linux运维笔记，程序员学习分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linux高级运维工程师之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FTP基础知识与搭建指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-21 20:31:02 / 修改时间：20:32:26" itemprop="dateCreated datePublished" datetime="2020-07-21T20:31:02+08:00">2020-07-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="FTP协议及FTP服务器搭建"><a href="#FTP协议及FTP服务器搭建" class="headerlink" title="FTP协议及FTP服务器搭建"></a>FTP协议及FTP服务器搭建</h2><p>File Transfer Protocol 文件传输协议 ，应用层协议—-RFC959</p>
+<p>传输效率高，在网络上传输大文件一般也采用该协议</p>
+<h3 id="FTP架构—-C-S："><a href="#FTP架构—-C-S：" class="headerlink" title="FTP架构—-C/S："></a>FTP架构—-C/S：</h3><blockquote>
+<p><code>1.服务器</code></p>
+<blockquote>
+<p>用于存储数据</p>
+</blockquote>
+<p><code>2.客户端</code></p>
+<blockquote>
+<p>用户通过客户端使用FTP协议登录、访问数据、下载数据</p>
+</blockquote>
+</blockquote>
+<h3 id="使用端口："><a href="#使用端口：" class="headerlink" title="使用端口："></a>使用端口：</h3><blockquote>
+<p>20： 用于主动模式的数据传输</p>
+<p>21：用于传输控制信息</p>
+<p>被动模式传输数据的端口试服务器与客户端协商</p>
+</blockquote>
+<h3 id="工作方式："><a href="#工作方式：" class="headerlink" title="工作方式："></a>工作方式：</h3><h5 id="一、Standard-主动模式-Port"><a href="#一、Standard-主动模式-Port" class="headerlink" title="一、Standard   主动模式 Port"></a>一、Standard   主动模式 Port</h5><blockquote>
+<p>1.<code>client:随机端口</code> 发送消息与 <code>server:21</code> 建立连接发送Port命令</p>
+<p>2.客户端需要接受数据时通过上面的链接发送自己定义的就收数据端口</p>
+<p>3.服务器接受命令后，使用20端口链接至指定端口，建立新连接传输数据</p>
+</blockquote>
+<h5 id="二、Passive-被动模式"><a href="#二、Passive-被动模式" class="headerlink" title="二、Passive   被动模式"></a>二、Passive   被动模式</h5><blockquote>
+<p>1.<code>client:随机端口</code> 发送消息与 <code>server:21</code> 建立连接发送Pasv命令</p>
+<p>2.服务器收到Pasv命令后随机打开一个端口<code>A</code> 并通知客户端这个端口上有传送数据请求</p>
+<p>3.客户端链接FTP的<code>A</code>端口，三次握手后进行数据传输</p>
+</blockquote>
+<p>一般有防火墙，在防火墙外时Pasv不通</p>
+<hr>
+<h3 id="FTP服务器的搭建"><a href="#FTP服务器的搭建" class="headerlink" title="FTP服务器的搭建"></a>FTP服务器的搭建</h3><p>服务器：10.1.1.137 </p>
+<blockquote>
+<p>服务器安装：<code>yum -y install vsftpd</code></p>
+<p>配置文件：<code>/etc/vsftpd/vsftpd.conf</code></p>
+<p>查看详细地配置  <code># man 5  vsftpd.conf</code></p>
+<p>数据存放位置 /var/ftp/pub下</p>
+<p>在数据存放位置新建一个文件<code>echo server &gt; test.txt</code></p>
+<p>启动服务：<code>systemctl start vsftpd</code></p>
+</blockquote>
+<p>客户端：10.1.1.136</p>
+<blockquote>
+<p>客户端安装：<code>yum -y install ftp</code></p>
+<p>默认用户：<code>ftp</code> 默认可以登录，下载文件 ，但是不可以上传文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="comment"># ftp 10.1.1.137  #登录服务器</span></span><br><span class="line">&gt;Connected to 10.1.1.137 (10.1.1.137).</span><br><span class="line">&gt;220 (vsFTPd 3.0.2)</span><br><span class="line">&gt;Name (10.1.1.137:root): ftp  <span class="comment">#用户名默认为ftp    </span></span><br><span class="line">&gt;331 Please specify the password.</span><br><span class="line">&gt;Password: <span class="comment">#密码默认为ftp</span></span><br><span class="line">&gt;230 Login successful.</span><br><span class="line">&gt;Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">&gt;Using binary mode to transfer files.</span><br><span class="line">&gt;ftp&gt; ls <span class="comment">#查看文件</span></span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,52,224).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;drwxr-xr-x    2 0        0              22 Jul 21 08:06 pub</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; <span class="built_in">cd</span> pub <span class="comment">#打开文件</span></span><br><span class="line">&gt;250 Directory successfully changed.</span><br><span class="line">&gt;ftp&gt; ls</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,249,206).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;-rw-r--r--    1 0        0               7 Jul 21 08:06 test.txt</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; get test.txt <span class="comment">#下载文件</span></span><br><span class="line">&gt;<span class="built_in">local</span>: test.txt remote: test.txt</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,56,149).</span><br><span class="line">&gt;150 Opening BINARY mode data connection <span class="keyword">for</span> test.txt (7 bytes).</span><br><span class="line">&gt;226 Transfer complete.</span><br><span class="line">&gt;7 bytes received <span class="keyword">in</span> 4.1e-05 secs (170.73 Kbytes/sec)</span><br><span class="line">&gt;ftp&gt; <span class="built_in">exit</span> <span class="comment">#推出ftp客户端</span></span><br><span class="line">&gt;221 Goodbye.</span><br><span class="line">&gt;<span class="comment"># ls</span></span><br><span class="line">&gt;test.txt</span><br><span class="line">&gt;<span class="comment"># cat test.txt</span></span><br><span class="line">&gt;server</span><br><span class="line">&gt;<span class="comment">#在哪里使用的ftp就会将文件下载到哪。</span></span><br></pre></td></tr></table></figure>
+
+<p>至此，ftp服务器搭建完毕</p>
+</blockquote>
+<hr>
+<h3 id="vsftpd-默认配置文件打开的项-cat-etc-vsftpd-vsftpd-con"><a href="#vsftpd-默认配置文件打开的项-cat-etc-vsftpd-vsftpd-con" class="headerlink" title="vsftpd 默认配置文件打开的项# cat /etc/vsftpd/vsftpd.con"></a>vsftpd 默认配置文件打开的项<code># cat /etc/vsftpd/vsftpd.con</code></h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">允许匿名用户登录</span></span><br><span class="line">anonymous_enable=YES</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">运行本地登录</span></span><br><span class="line">local_enable=YES</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">允许任何的FTP写命令</span></span><br><span class="line">write_enable=YES</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">默认掩码</span></span><br><span class="line">local_umask=022</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否允许匿名用户上传文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash">anon_upload_enable=YES</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">是否允许匿名用户创建目录</span></span><br><span class="line"><span class="meta">#</span><span class="bash">anon_mkdir_write_enable=YES</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Activate directory messages - messages given to remote users when they</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> go into a certain directory.</span></span><br><span class="line">dirmessage_enable=YES</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Activate logging of uploads/downloads.</span></span><br><span class="line">xferlog_enable=YES</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Make sure PORT transfer connections originate from port 20 (ftp-data).</span></span><br><span class="line">connect_from_port_20=YES</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash">root不推荐上传文件，这俩个选项是做文件所属者的</span></span><br><span class="line"><span class="meta">#</span><span class="bash">chown_uploads=YES</span></span><br><span class="line"><span class="meta">#</span><span class="bash">chown_username=whoever</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash">日志文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash">xferlog_file=/var/<span class="built_in">log</span>/xferlog</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 日志文件格式</span></span><br><span class="line">xferlog_std_format=YES</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash">session默认值</span></span><br><span class="line"><span class="meta">#</span><span class="bash">idle_session_timeout=600</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 数据连接超时</span></span><br><span class="line"><span class="meta">#</span><span class="bash">data_connection_timeout=120</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> When <span class="string">"listen"</span> directive is enabled, vsftpd runs <span class="keyword">in</span> standalone mode and</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> listens on IPv4 sockets. This directive cannot be used <span class="keyword">in</span> conjunction</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> with the listen_ipv6 directive.</span></span><br><span class="line">listen=NO</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> This directive enables listening on IPv6 sockets. By default, listening</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> on the IPv6 <span class="string">"any"</span> address (::) will accept connections from both IPv6</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> and IPv4 clients. It is not necessary to listen on *both* IPv4 and IPv6</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> sockets. If you want that (perhaps because you want to listen on specific</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> addresses) <span class="keyword">then</span> you must run two copies of vsftpd with two configuration</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> files.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Make sure, that one of the listen options is commented !!</span></span><br><span class="line">listen_ipv6=YES</span><br><span class="line"></span><br><span class="line">pam_service_name=vsftpd</span><br><span class="line">userlist_enable=YES</span><br><span class="line">tcp_wrappers=YES</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h5 id="vsftp用户登录模式"><a href="#vsftp用户登录模式" class="headerlink" title="vsftp用户登录模式"></a>vsftp用户登录模式</h5><blockquote>
+<p>匿名模式：任何人无需密码验证即可等领导FTP服务器，不安全。</p>
+<p>本地用户模式：使用Linux本地/etc/passwd的账户登录，较安全</p>
+<p>虚拟用户模式：单独存ftp的用户口令信息</p>
+</blockquote>
+<p>如果碰到防火墙不可以关闭的情况 配置实例<code>-A INPUT -p tcp -m state --state NEW -m tcp --dport 21 -j ACCEPT</code></p>
+<h5 id="一、匿名模式访问"><a href="#一、匿名模式访问" class="headerlink" title="一、匿名模式访问"></a>一、匿名模式访问</h5><blockquote>
+<p>任何人都可以访问，我们只需开启和下载<br>除了默认参数，再打开俩个参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;anon_mkdir_write_enable&#x3D;YES    #允许匿名用户创建目录</span><br><span class="line">&gt;anon_upload_enable&#x3D;YES    #允许匿名用户上传文件</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h5 id="二、本地用户模式"><a href="#二、本地用户模式" class="headerlink" title="二、本地用户模式"></a>二、本地用户模式</h5><blockquote>
+<p>使用本地/etc/passwd用户</p>
+<p>默认禁止root用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;anonymous_enable&#x3D;NO    #禁止匿名访问模式</span><br><span class="line">&gt;userlist_deny&#x3D;YES    #启用“禁止用户名单”，名单文件为ftpusers和user_list</span><br><span class="line">&gt;userlist_enable&#x3D;YES    #开启用户作用名单文件功能</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&gt;Name (10.1.1.137:root): zhanghz    <span class="comment">#这个账户是我事先再服务器端创建的    </span></span><br><span class="line">&gt;331 Please specify the password.</span><br><span class="line">&gt;Password:</span><br><span class="line">&gt;230 Login successful.</span><br><span class="line">&gt;Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">&gt;Using binary mode to transfer files.</span><br><span class="line">&gt;ftp&gt; ls</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,175,52).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; ls</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,98,22).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; <span class="built_in">cd</span></span><br><span class="line">&gt;(remote-directory) </span><br><span class="line">&gt;usage: <span class="built_in">cd</span> remote-directory</span><br><span class="line">&gt;ftp&gt; <span class="built_in">cd</span> ..</span><br><span class="line">&gt;250 Directory successfully changed.</span><br><span class="line">&gt;ftp&gt; ls</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,127,19).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;drwx------    2 1001     1001           62 Jul 21 11:30 zhanghz</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; <span class="built_in">cd</span> ..</span><br><span class="line">&gt;250 Directory successfully changed.</span><br><span class="line">&gt;ftp&gt; ls</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,146,74).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;lrwxrwxrwx    1 0        0               7 Jul 20 03:37 bin -&gt; usr/bin</span><br><span class="line">&gt;dr-xr-xr-x    5 0        0            4096 Jul 20 03:51 boot</span><br><span class="line">&gt;drwxr-xr-x   21 0        0            3200 Apr 11  2018 dev</span><br><span class="line">&gt;drwxr-xr-x   82 0        0            8192 Jul 21 11:32 etc</span><br><span class="line">&gt;drwxr-xr-x    3 0        0              21 Jul 21 11:30 home</span><br><span class="line">&gt;lrwxrwxrwx    1 0        0               7 Jul 20 03:37 lib -&gt; usr/lib</span><br><span class="line">&gt;lrwxrwxrwx    1 0        0               9 Jul 20 03:37 lib64 -&gt; usr/lib64</span><br><span class="line">&gt;drwxr-xr-x    2 0        0               6 Apr 11  2018 media</span><br><span class="line">&gt;drwxr-xr-x    2 0        0               6 Apr 11  2018 mnt</span><br><span class="line">&gt;drwxr-xr-x    4 0        0              35 Jul 20 09:41 opt</span><br><span class="line">&gt;dr-xr-xr-x  117 0        0               0 Apr 11  2018 proc</span><br><span class="line">&gt;dr-xr-x---    5 0        0             224 Jul 21 11:34 root</span><br><span class="line">&gt;drwxr-xr-x   29 0        0             880 Jul 21 07:34 run</span><br><span class="line">&gt;lrwxrwxrwx    1 0        0               8 Jul 20 03:37 sbin -&gt; usr/sbin</span><br><span class="line">&gt;drwxr-xr-x    2 0        0               6 Apr 11  2018 srv</span><br><span class="line">&gt;dr-xr-xr-x   13 0        0               0 Apr 11  2018 sys</span><br><span class="line">&gt;drwxrwxrwt    8 0        0             260 Jul 21 07:34 tmp</span><br><span class="line">&gt;drwxr-xr-x   13 0        0             155 Jul 20 03:37 usr</span><br><span class="line">&gt;drwxr-xr-x   20 0        0             278 Jul 21 07:34 var</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>从上面看出来 此时确实使用了服务器本地的用户文件，且限制了通用共有的系统用户，但是彬没有限制其登录目录，导致其可以进入到根目录。</p>
+<p><strong>在配置文件中加入</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;chroot_local_user=NO                  <span class="comment">#当为YES时，chroot_list中的用户不锁定目录，为NO时，chroot_list中的用户锁定目录</span></span><br><span class="line">&gt;chroot_list_enable=YES</span><br><span class="line">&gt;chroot_list_file=/etc/vsftpd/chroot_list <span class="comment">#将你限制的用户写到这个文件里</span></span><br><span class="line">&gt;allow_writeable_chroot=YES         <span class="comment">#这句必须有</span></span><br></pre></td></tr></table></figure>
+
+<p>上诉即可限制其在自己的目录</p>
+</blockquote>
+<h5 id="三、虚拟用户模式"><a href="#三、虚拟用户模式" class="headerlink" title="三、虚拟用户模式"></a>三、虚拟用户模式</h5><blockquote>
+<p>就是使用自定义账户</p>
+<p>在此模式中我们可以新建一个文件，/etc/vsftpd/vuser.list</p>
+<p>此文件中单数行为用户名，奇数行为密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;# cat &#x2F;etc&#x2F;vsftpd&#x2F;vuser.txt</span><br><span class="line">&gt;test1</span><br><span class="line">&gt;qwe</span><br><span class="line">&gt;test2</span><br><span class="line">&gt;123qwe</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我们使用hash算法使得明文文件变为密文</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="comment"># db_load -T -t hash -f vuser.txt vuser.db</span></span><br><span class="line">&gt;<span class="comment"># cat vuser.db </span></span><br><span class="line">&gt;፜������эh^qwetest1</span><br><span class="line">&gt;<span class="comment"># chmod 600 vuser.db</span></span><br><span class="line">&gt;<span class="comment"># rm -f vuse.txt</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>创建vsftpd服务程序用于存储文件的根目录(/var/ftproot)</strong>以及虚拟用户映射的系<strong>统本地用户(virtual)</strong>。FTP服务用于存储文件的根目录指的是，当虚拟用户登录后所访问的默认位置。</p>
+<p>由于Linux系统中的每一个文件都有所有者、所属组属性，例如使用虚拟账户“张三”新建了一个文件，但是系统中找不到账户“张三”，就会导致这个文件的权限出现错误。为此，需要再创建一个可以映射到虚拟用户的系统本地用户。简单来说，就是让虚拟用户默认登录到与之有映射关系的这个系统本地用户的家目录中，虚拟用户创建的文件的属性也都归属于这个系统本地用户，从而避免Linux系统无法处理虚拟用户所创建文件的属性权限。</p>
+<p>为了方便管理FTP服务器上的数据，可以把这个系统本地用户的家目录设置为/var目录（该目录用来存放经常发生改变的数据）。并且为了安全起见，我们将这个系统本地用户设置为不允许登录FTP服务器，这不会影响虚拟用户登录，而且还可以避免黑客通过这个系统本地用户进行登录。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="comment"># useradd -d /var/ftproot -s /sbin/nologin virtual</span></span><br><span class="line">&gt;<span class="comment">#  ls -ld /var/ftproot/</span></span><br><span class="line">&gt;drwx------. 2 virtual virtual 62 Jul 21 08:02 /var/ftproot/</span><br><span class="line">&gt;<span class="comment"># chmod -Rf 755 /var/ftproot/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>建立用于支持虚拟用户的PAM文件。通俗来讲，PAM是一组安全机制的模块，系统管理员可以用来轻易地调整服务程序的认证方式，而不必对应用程序进行任何修改。PAM采取了分层设计（应用程序层、应用接口层、鉴别模块层）的思想，</p>
+<p>新建一个用于虚拟用户认证的PAM文件vsftpd.vu，其中PAM文件内的“db=”参数为使用db_load命令生成的账户密码数据库文件的路径，但不用写数据库文件的后缀：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;# vim &#x2F;etc&#x2F;pam.d&#x2F;vsftpd.vu</span><br><span class="line">&gt;auth       required     pam_userdb.so db&#x3D;&#x2F;etc&#x2F;vsftpd&#x2F;vuser</span><br><span class="line">&gt;account    required     pam_userdb.so db&#x3D;&#x2F;etc&#x2F;vsftpd&#x2F;vuser</span><br></pre></td></tr></table></figure>
+
+<p>在vsftpd服务程序的主配置文件中通过pam_service_name参数将PAM认证文件的名称修改为vsftpd.vu，PAM作为应用程序层与鉴别模块层的连接纽带，可以让应用程序根据需求灵活地在自身插入所需的鉴别功能模块。当应用程序需要PAM认证时，则需要在应用程序中定义负责认证的PAM配置文件，实现所需的认证功能。</p>
+<p>例如，在vsftpd服务程序的主配置文件中默认就带有参数pam_service_name=vsftpd，表示登录FTP服务器时是根据/etc/pam.d/vsftpd文件进行安全认证的。现在我们要做的就是把vsftpd主配置文件中原有的PAM认证文件vsftpd修改为新建的vsftpd.vu文件即可。</p>
+<p>修改配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;guest_enable&#x3D;YES    #开启虚拟用户模式</span><br><span class="line">&gt;guest_username&#x3D;virtual    #指定虚拟用户账户</span><br><span class="line">&gt;pam_service_name&#x3D;vsftpd.vu    #指定PAM文件</span><br><span class="line">&gt;allow_writeable_chroot&#x3D;YES    #允许对禁锢的FTP根目录执行写入操作，而且不拒绝用户的登录请求</span><br></pre></td></tr></table></figure>
+
+<p>实际登录可行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="comment"># echo "123" &gt;test1.txt</span></span><br><span class="line">&gt;<span class="comment"># cat test1.txt </span></span><br><span class="line">&gt;123</span><br><span class="line">&gt;<span class="comment"># ftp 10.1.1.137</span></span><br><span class="line">&gt;Connected to 10.1.1.137 (10.1.1.137).</span><br><span class="line">&gt;220 (vsFTPd 3.0.2)</span><br><span class="line">&gt;Name (10.1.1.137:root): test1</span><br><span class="line">&gt;331 Please specify the password.</span><br><span class="line">&gt;Password:</span><br><span class="line">&gt;230 Login successful.</span><br><span class="line">&gt;Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">&gt;Using binary mode to transfer files.</span><br><span class="line">&gt;ftp&gt; ls</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,157,81).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; put test1.txt</span><br><span class="line">&gt;<span class="built_in">local</span>: test1.txt remote: test1.txt</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,190,86).</span><br><span class="line">&gt;150 Ok to send data.</span><br><span class="line">&gt;226 Transfer complete.</span><br><span class="line">&gt;4 bytes sent <span class="keyword">in</span> 3.8e-05 secs (105.26 Kbytes/sec)</span><br><span class="line">&gt;ftp&gt; ls</span><br><span class="line">&gt;227 Entering Passive Mode (10,1,1,137,174,253).</span><br><span class="line">&gt;150 Here comes the directory listing.</span><br><span class="line">&gt;-rw-------    1 1002     1002            4 Jul 21 12:22 test1.txt</span><br><span class="line">&gt;226 Directory send OK.</span><br><span class="line">&gt;ftp&gt; <span class="built_in">exit</span></span><br><span class="line">&gt;221 Goodbye.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>服务器端检查：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;# cd &#x2F;var&#x2F;ftproot&#x2F;</span><br><span class="line">&gt;# ls</span><br><span class="line">&gt;test1.txt</span><br><span class="line">&gt;# cat test1.txt </span><br><span class="line">&gt;123</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-FTP%E6%90%AD%E5%BB%BA-FTP%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6-FTP%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-FTP%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7/" rel="tag"># FTP基础知识 FTP搭建 FTP保姆级教学 FTP配置文件 FTP自定义用户</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/" rel="prev" title="influxdb备份与还原">
+      <i class="fa fa-chevron-left"></i> influxdb备份与还原
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#FTP协议及FTP服务器搭建"><span class="nav-number">1.</span> <span class="nav-text">FTP协议及FTP服务器搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FTP架构—-C-S："><span class="nav-number">1.1.</span> <span class="nav-text">FTP架构—-C&#x2F;S：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用端口："><span class="nav-number">1.2.</span> <span class="nav-text">使用端口：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作方式："><span class="nav-number">1.3.</span> <span class="nav-text">工作方式：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、Standard-主动模式-Port"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">一、Standard   主动模式 Port</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、Passive-被动模式"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">二、Passive   被动模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FTP服务器的搭建"><span class="nav-number">1.4.</span> <span class="nav-text">FTP服务器的搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vsftpd-默认配置文件打开的项-cat-etc-vsftpd-vsftpd-con"><span class="nav-number">1.5.</span> <span class="nav-text">vsftpd 默认配置文件打开的项# cat &#x2F;etc&#x2F;vsftpd&#x2F;vsftpd.con</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#vsftp用户登录模式"><span class="nav-number">1.5.0.1.</span> <span class="nav-text">vsftp用户登录模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一、匿名模式访问"><span class="nav-number">1.5.0.2.</span> <span class="nav-text">一、匿名模式访问</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、本地用户模式"><span class="nav-number">1.5.0.3.</span> <span class="nav-text">二、本地用户模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、虚拟用户模式"><span class="nav-number">1.5.0.4.</span> <span class="nav-text">三、虚拟用户模式</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">瀚中子</p>
+  <div class="site-description" itemprop="description">Linux运维笔记，程序员学习分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">瀚中子</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
