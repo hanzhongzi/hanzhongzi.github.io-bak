@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://127.0.0.1:8080/"/>
-  <updated>2020-07-21T12:32:26.077Z</updated>
+  <updated>2020-07-22T07:07:02.808Z</updated>
   <id>http://127.0.0.1:8080/</id>
   
   <author>
@@ -21,23 +21,50 @@
     <link href="http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/"/>
     <id>http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/</id>
     <published>2020-07-21T12:31:02.000Z</published>
-    <updated>2020-07-21T12:32:26.077Z</updated>
+    <updated>2020-07-22T07:07:02.808Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;FTP协议及FTP服务器搭建&quot;&gt;&lt;a href=&quot;#FTP协议及FTP服务器搭建&quot; class=&quot;headerlink&quot; title=&quot;FTP协议及FTP服务器搭建&quot;&gt;&lt;/a&gt;FTP协议及FTP服务器搭建&lt;/h2&gt;&lt;p&gt;File Transfer
-        
-      
+      &lt;h2 id=&quot;FTP协议及FTP服务器搭建&quot;&gt;&lt;a href=&quot;#FTP协议及FTP服务器搭建&quot; class=&quot;headerlink&quot; title=&quot;FTP协议及FTP服务器搭建&quot;&gt;&lt;/a&gt;FTP协议及FTP服务器搭建&lt;/h2&gt;&lt;p&gt;File Transfer Protocol 文件传输协议 ，应用层协议—-RFC959&lt;/p&gt;
+&lt;p&gt;传输效率高，在网络上传输大文件一般也采用该协议&lt;/p&gt;
+&lt;h3 id=&quot;FTP架构—-C-S：&quot;&gt;&lt;a href=&quot;#FTP架构—-C-S：&quot; class=&quot;headerlink&quot; title=&quot;FTP架构—-C/S：&quot;&gt;&lt;/a&gt;FTP架构—-C/S：&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;1.服务器&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用于存储数据&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;2.客户端&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用户通过客户端使用FTP协议登录、访问数据、下载数据&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;使用端口：&quot;&gt;&lt;a href=&quot;#使用端口：&quot; class=&quot;headerlink&quot; title=&quot;使用端口：&quot;&gt;&lt;/a&gt;使用端口：&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;20： 用于主动模式的数据传输&lt;/p&gt;
+&lt;p&gt;21：用于传输控制信息&lt;/p&gt;
+&lt;p&gt;被动模式传输数据的端口试服务器与客户端协商&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;工作方式：&quot;&gt;&lt;a href=&quot;#工作方式：&quot; class=&quot;headerlink&quot; title=&quot;工作方式：&quot;&gt;&lt;/a&gt;工作方式：&lt;/h3&gt;&lt;h5 id=&quot;一、Standard-主动模式-Port&quot;&gt;&lt;a href=&quot;#一、Standard-主动模式-Port&quot; class=&quot;headerlink&quot; title=&quot;一、Standard   主动模式 Port&quot;&gt;&lt;/a&gt;一、Standard   主动模式 Port&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;1.&lt;code&gt;client:随机端口&lt;/code&gt; 发送消息与 &lt;code&gt;server:21&lt;/code&gt; 建立连接发送Port命令&lt;/p&gt;
+&lt;p&gt;2.客户端需要接受数据时通过上面的链接发送自己定义的就收数据端口&lt;/p&gt;
+&lt;p&gt;3.服务器接受命令后，使用20端口链接至指定端口，建立新连接传输数据&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&quot;二、Passive-被动模式&quot;&gt;&lt;a href=&quot;#二、Passive-被动模式&quot; class=&quot;headerlink&quot; title=&quot;二、Passive   被动模式&quot;&gt;&lt;/a&gt;二、Passive   被动模式&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;1.&lt;code&gt;client:随机端口&lt;/code&gt; 发送消息与 &lt;code&gt;server:21&lt;/code&gt; 建立连接发送Pasv命令&lt;/p&gt;
+&lt;p&gt;2.服务器收到Pasv命令后随机打开一个端口&lt;code&gt;A&lt;/code&gt; 并通知客户端这个端口上有传送数据请求&lt;/p&gt;
+&lt;p&gt;3.客户端链接FTP的&lt;code&gt;A&lt;/code&gt;端口，三次握手后进行数据传输&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一般有防火墙，在防火墙外时Pasv不通&lt;/p&gt;
     
     </summary>
     
     
+      <category term="Linux基础服务" scheme="http://127.0.0.1:8080/categories/Linux%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/"/>
     
-      <category term="FTP基础知识 FTP搭建 FTP保姆级教学 FTP配置文件 FTP自定义用户" scheme="http://127.0.0.1:8080/tags/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-FTP%E6%90%AD%E5%BB%BA-FTP%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6-FTP%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-FTP%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7/"/>
+    
+      <category term="FTP基础知识" scheme="http://127.0.0.1:8080/tags/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    
+      <category term="FTP搭建" scheme="http://127.0.0.1:8080/tags/FTP%E6%90%AD%E5%BB%BA/"/>
+    
+      <category term="FTP自定义用户" scheme="http://127.0.0.1:8080/tags/FTP%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7/"/>
     
   </entry>
   
