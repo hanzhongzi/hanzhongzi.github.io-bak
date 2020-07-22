@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://127.0.0.1:8080/"/>
-  <updated>2020-07-22T07:16:15.114Z</updated>
+  <updated>2020-07-22T07:43:38.853Z</updated>
   <id>http://127.0.0.1:8080/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/"/>
     <id>http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/</id>
     <published>2020-07-21T12:31:02.000Z</published>
-    <updated>2020-07-22T07:16:15.114Z</updated>
+    <updated>2020-07-22T07:43:38.853Z</updated>
     
     <summary type="html">
     
@@ -36,11 +36,6 @@
 &lt;blockquote&gt;
 &lt;p&gt;用户通过客户端使用FTP协议登录、访问数据、下载数据&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;使用端口：&quot;&gt;&lt;a href=&quot;#使用端口：&quot; class=&quot;headerlink&quot; title=&quot;使用端口：&quot;&gt;&lt;/a&gt;使用端口：&lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;20： 用于主动模式的数据传输&lt;/p&gt;
-&lt;p&gt;21：用于传输控制信息&lt;/p&gt;
-&lt;p&gt;被动模式传输数据的端口试服务器与客户端协商&lt;/p&gt;
 &lt;/blockquote&gt;
     
     </summary>
@@ -62,7 +57,7 @@
     <link href="http://127.0.0.1:8080/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/"/>
     <id>http://127.0.0.1:8080/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/</id>
     <published>2020-07-15T04:03:11.000Z</published>
-    <updated>2020-07-15T04:06:22.758Z</updated>
+    <updated>2020-07-22T07:46:10.695Z</updated>
     
     <summary type="html">
     
@@ -77,8 +72,12 @@
     </summary>
     
     
+      <category term="influxdb" scheme="http://127.0.0.1:8080/categories/influxdb/"/>
     
-      <category term="influxdb备份与还原 influxd backup" scheme="http://127.0.0.1:8080/tags/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F-influxd-backup/"/>
+    
+      <category term="influxdb备份与还原" scheme="http://127.0.0.1:8080/tags/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/"/>
+    
+      <category term="influxd backup" scheme="http://127.0.0.1:8080/tags/influxd-backup/"/>
     
   </entry>
   
@@ -87,7 +86,7 @@
     <link href="http://127.0.0.1:8080/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/"/>
     <id>http://127.0.0.1:8080/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/</id>
     <published>2020-07-07T09:03:02.000Z</published>
-    <updated>2020-07-07T09:04:10.505Z</updated>
+    <updated>2020-07-22T07:46:46.793Z</updated>
     
     <summary type="html">
     
@@ -102,8 +101,14 @@
     </summary>
     
     
+      <category term="leetcode" scheme="http://127.0.0.1:8080/categories/leetcode/"/>
     
-      <category term="leetcode 编程 Python3" scheme="http://127.0.0.1:8080/tags/leetcode-%E7%BC%96%E7%A8%8B-Python3/"/>
+    
+      <category term="leetcode" scheme="http://127.0.0.1:8080/tags/leetcode/"/>
+    
+      <category term="编程" scheme="http://127.0.0.1:8080/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python3" scheme="http://127.0.0.1:8080/tags/Python3/"/>
     
   </entry>
   
@@ -112,23 +117,23 @@
     <link href="http://127.0.0.1:8080/2020/07/07/kubernetes%E6%90%AD%E5%BB%BA/"/>
     <id>http://127.0.0.1:8080/2020/07/07/kubernetes%E6%90%AD%E5%BB%BA/</id>
     <published>2020-07-07T08:46:48.000Z</published>
-    <updated>2020-07-07T08:48:41.606Z</updated>
+    <updated>2020-07-22T07:43:52.455Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;kuberbetes-centos&quot;&gt;&lt;a href=&quot;#kuberbetes-centos&quot; class=&quot;headerlink&quot; title=&quot;kuberbetes-centos&quot;&gt;&lt;/a&gt;kuberbetes-centos&lt;/h1&gt;&lt;h2
-        
-      
+      &lt;h1 id=&quot;kuberbetes-centos&quot;&gt;&lt;a href=&quot;#kuberbetes-centos&quot; class=&quot;headerlink&quot; title=&quot;kuberbetes-centos&quot;&gt;&lt;/a&gt;kuberbetes-centos&lt;/h1&gt;&lt;h2 id=&quot;centos7-8-部署-kubernetes-集群&quot;&gt;&lt;a href=&quot;#centos7-8-部署-kubernetes-集群&quot; class=&quot;headerlink&quot; title=&quot;centos7/8 部署 kubernetes 集群&quot;&gt;&lt;/a&gt;centos7/8 部署 kubernetes 集群&lt;/h2&gt;&lt;h4 id=&quot;安装docker-ce&quot;&gt;&lt;a href=&quot;#安装docker-ce&quot; class=&quot;headerlink&quot; title=&quot;安装docker-ce&quot;&gt;&lt;/a&gt;安装docker-ce&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/centos/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Master、Node节点都需要安装、配置Docker&lt;/strong&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 卸载原来的docker&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo yum remove docker \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  docker-client \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  docker-client-latest \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  docker-common \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  docker-latest \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  docker-latest-logrotate \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  docker-logrotate \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  docker-engine&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 安装依赖&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo yum update -y &amp;amp;&amp;amp; sudo yum install -y yum-utils \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  device-mapper-persistent-data \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  lvm2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 添加官方yum库&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo yum-config-manager \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    --add-repo \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    https://download.docker.com/linux/centos/docker-ce.repo&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 安装docker&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo yum install docker-ce docker-ce-cli containerd.io&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 查看docker版本&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;docker --version&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 开机启动&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;systemctl &lt;span class=&quot;built_in&quot;&gt;enable&lt;/span&gt; --now docker&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
     
+      <category term="kubernetes" scheme="http://127.0.0.1:8080/categories/kubernetes/"/>
     
-      <category term="kubernetes搭建 k8s docker" scheme="http://127.0.0.1:8080/tags/kubernetes%E6%90%AD%E5%BB%BA-k8s-docker/"/>
+    
+      <category term="k8s基础知识" scheme="http://127.0.0.1:8080/tags/k8s%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    
+      <category term="k8s搭建" scheme="http://127.0.0.1:8080/tags/k8s%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   
@@ -161,23 +166,27 @@
     <link href="http://127.0.0.1:8080/2020/07/06/reids%E5%8D%95%E5%AE%9E%E4%BE%8B%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"/>
     <id>http://127.0.0.1:8080/2020/07/06/reids%E5%8D%95%E5%AE%9E%E4%BE%8B%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</id>
     <published>2020-07-06T08:08:30.000Z</published>
-    <updated>2020-07-06T08:09:29.907Z</updated>
+    <updated>2020-07-22T07:44:57.839Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;Redis基础&quot;&gt;&lt;a href=&quot;#Redis基础&quot; class=&quot;headerlink&quot;
-        
-      
+      &lt;h1 id=&quot;Redis基础&quot;&gt;&lt;a href=&quot;#Redis基础&quot; class=&quot;headerlink&quot; title=&quot;Redis基础&quot;&gt;&lt;/a&gt;Redis基础&lt;/h1&gt;&lt;p&gt;Redis是完全开源免费的，是一个高性能的&lt;strong&gt;key-value&lt;/strong&gt;数据库。基于内存亦可持久化的日志型数据结构服务器。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;* 数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加再进行使用。
+* 支持string,list,zset,hash,String,stream数据结构。
+* 支持数据的备份（主从模式）&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;优势&quot;&gt;&lt;a href=&quot;#优势&quot; class=&quot;headerlink&quot; title=&quot;优势&quot;&gt;&lt;/a&gt;优势&lt;/h2&gt;&lt;p&gt;性能及高，读速度每秒十万次，写速度每秒八万次。&lt;/p&gt;
+&lt;p&gt;丰富的数据类型&lt;em&gt;（string,list,zset,hash,5.0加入stream）。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;所有操作均是原子性的，(单个操作是原子性，多操作也支持事务）。&lt;/p&gt;
+&lt;p&gt;支持publish/subscribe，通知，key过期。&lt;/p&gt;
+&lt;hr&gt;
     
     </summary>
     
     
+      <category term="Redis" scheme="http://127.0.0.1:8080/categories/Redis/"/>
     
-      <category term="reids" scheme="http://127.0.0.1:8080/tags/reids/"/>
+    
+      <category term="reids基础知识及其搭建" scheme="http://127.0.0.1:8080/tags/reids%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%8F%8A%E5%85%B6%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   
