@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Linux高级运维工程师之路</title>
+  
+  <subtitle>云毕业的瀚中子</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://127.0.0.1:8080/"/>
+  <updated>2020-07-21T12:32:26.077Z</updated>
+  <id>http://127.0.0.1:8080/</id>
+  
+  <author>
+    <name>瀚中子</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>FTP基础知识与搭建指南</title>
+    <link href="http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/"/>
+    <id>http://127.0.0.1:8080/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/</id>
+    <published>2020-07-21T12:31:02.000Z</published>
+    <updated>2020-07-21T12:32:26.077Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;FTP协议及FTP服务器搭建&quot;&gt;&lt;a href=&quot;#FTP协议及FTP服务器搭建&quot; class=&quot;headerlink&quot; title=&quot;FTP协议及FTP服务器搭建&quot;&gt;&lt;/a&gt;FTP协议及FTP服务器搭建&lt;/h2&gt;&lt;p&gt;File Transfer
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="FTP基础知识 FTP搭建 FTP保姆级教学 FTP配置文件 FTP自定义用户" scheme="http://127.0.0.1:8080/tags/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-FTP%E6%90%AD%E5%BB%BA-FTP%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6-FTP%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-FTP%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>influxdb备份与还原</title>
+    <link href="http://127.0.0.1:8080/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/"/>
+    <id>http://127.0.0.1:8080/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/</id>
+    <published>2020-07-15T04:03:11.000Z</published>
+    <updated>2020-07-15T04:06:22.758Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;influxdb备份&quot;&gt;&lt;a href=&quot;#influxdb备份&quot; class=&quot;headerlink&quot; title=&quot;influxdb备份&quot;&gt;&lt;/a&gt;influxdb备份&lt;/h2&gt;&lt;h3 id=&quot;备份参数说明&quot;&gt;&lt;a href=&quot;#备份参数说明&quot;
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="influxdb备份与还原 influxd backup" scheme="http://127.0.0.1:8080/tags/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F-influxd-backup/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode_1俩数之和</title>
+    <link href="http://127.0.0.1:8080/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/"/>
+    <id>http://127.0.0.1:8080/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/</id>
+    <published>2020-07-07T09:03:02.000Z</published>
+    <updated>2020-07-07T09:04:10.505Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;#问题描述：&lt;br&gt;给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。&lt;br&gt;你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。&lt;br&gt;示例:&lt;br&gt;给定 nums = [2,
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="leetcode 编程 Python3" scheme="http://127.0.0.1:8080/tags/leetcode-%E7%BC%96%E7%A8%8B-Python3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>kubernetes搭建</title>
+    <link href="http://127.0.0.1:8080/2020/07/07/kubernetes%E6%90%AD%E5%BB%BA/"/>
+    <id>http://127.0.0.1:8080/2020/07/07/kubernetes%E6%90%AD%E5%BB%BA/</id>
+    <published>2020-07-07T08:46:48.000Z</published>
+    <updated>2020-07-07T08:48:41.606Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;kuberbetes-centos&quot;&gt;&lt;a href=&quot;#kuberbetes-centos&quot; class=&quot;headerlink&quot; title=&quot;kuberbetes-centos&quot;&gt;&lt;/a&gt;kuberbetes-centos&lt;/h1&gt;&lt;h2
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="kubernetes搭建 k8s docker" scheme="http://127.0.0.1:8080/tags/kubernetes%E6%90%AD%E5%BB%BA-k8s-docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>瀚中子</title>
+    <link href="http://127.0.0.1:8080/2020/07/06/hello-world/"/>
+    <id>http://127.0.0.1:8080/2020/07/06/hello-world/</id>
+    <published>2020-07-06T08:16:59.307Z</published>
+    <updated>2020-07-06T08:16:59.306Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;欢迎欢迎，热烈欢迎&lt;br&gt;记录学习，分想知识&lt;/p&gt;
+
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>reids单实例安装配置</title>
+    <link href="http://127.0.0.1:8080/2020/07/06/reids%E5%8D%95%E5%AE%9E%E4%BE%8B%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"/>
+    <id>http://127.0.0.1:8080/2020/07/06/reids%E5%8D%95%E5%AE%9E%E4%BE%8B%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</id>
+    <published>2020-07-06T08:08:30.000Z</published>
+    <updated>2020-07-06T08:09:29.907Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;Redis基础&quot;&gt;&lt;a href=&quot;#Redis基础&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="reids" scheme="http://127.0.0.1:8080/tags/reids/"/>
+    
+  </entry>
+  
+</feed>
