@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>瀚中子</title>
-    <url>/2020/07/06/hello-world/</url>
-    <content><![CDATA[<p>欢迎欢迎，热烈欢迎<br>记录学习，分想知识</p>
-]]></content>
-  </entry>
-  <entry>
     <title>influxdb备份与还原</title>
     <url>/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/</url>
     <content><![CDATA[<h2 id="influxdb备份"><a href="#influxdb备份" class="headerlink" title="influxdb备份"></a>influxdb备份</h2><h3 id="备份参数说明"><a href="#备份参数说明" class="headerlink" title="备份参数说明"></a>备份参数说明</h3><p><code>influxd backup [options] PATH</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-portable</span><br><span class="line">	适配格式备份模式，建议每次都启用</span><br><span class="line">-host &lt;host:port&gt;</span><br><span class="line">        默认 127.0.0.1:8088。</span><br><span class="line">-db &lt;name&gt;</span><br><span class="line">        没有特别说明数据库将备份全部数据库</span><br><span class="line">-rp &lt;name&gt;</span><br><span class="line">        不指定备份保留策略，及全备份， 如果指定，则需要-database。</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line">-shard &lt;id&gt;</span><br><span class="line">        指定要备份的shard ID  如果指定，那么必须指定保留策略</span><br><span class="line">-start &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        指定时间戳开始的点（RFC3339格式），不能和since连用。</span><br><span class="line">-end &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        排除指定时间戳（RFC3339格式）之后的所有结果，不能喝since连用。</span><br><span class="line">-since &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        在指定的时间戳RFC3339格式之后执行增量备份。 除非旧式备份支持需要，否则请使用-start。</span><br><span class="line">-skip-errors </span><br><span class="line">        出错忽略</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-portable</span><br><span class="line">	适配格式备份模式，建议每次都启用</span><br><span class="line">-host &lt;host:port&gt;</span><br><span class="line">        默认 127.0.0.1:8088。</span><br><span class="line">-db &lt;name&gt;</span><br><span class="line">        没有特别说明数据库将备份全部数据库</span><br><span class="line">-rp &lt;name&gt;</span><br><span class="line">        不指定备份保留策略，及全备份， 如果指定，则需要-database。</span><br><span class="line">-shard &lt;id&gt;</span><br><span class="line">        指定要备份的shard ID  如果指定，那么必须指定保留策略</span><br><span class="line">-start &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        指定时间戳开始的点（RFC3339格式），不能和since连用。</span><br><span class="line">-end &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        排除指定时间戳（RFC3339格式）之后的所有结果，不能喝since连用。</span><br><span class="line">-since &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        在指定的时间戳RFC3339格式之后执行增量备份。 除非旧式备份支持需要，否则请使用-start。</span><br><span class="line">-skip-errors </span><br><span class="line">        出错忽略</span><br></pre></td></tr></table></figure>
 
 <p>备份的数据在指定的目录中生产压缩包，文件名在创建时包括UTC时间戳记</p>
 <h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p><strong>备份所有内容</strong></p>
@@ -50,93 +45,12 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode_1俩数之和</title>
-    <url>/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
-    <content><![CDATA[<p>#问题描述：<br>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。<br>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。<br>示例:<br>给定 nums = [2, 7, 11, 15], target = 9<br>因为 nums[0] + nums[1] = 2 + 7 = 9<br>所以返回 [0, 1]</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/two-sum" target="_blank" rel="noopener">https://leetcode-cn.com/problems/two-sum</a></p>
-<h3 id="第一版答案："><a href="#第一版答案：" class="headerlink" title="第一版答案："></a>第一版答案：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">twoSum</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        reList = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(nums)):</span><br><span class="line">                <span class="keyword">if</span>(nums[i]+nums[j] == target):</span><br><span class="line">                    reList.append(i)</span><br><span class="line">                    reList.append(j)    </span><br><span class="line">        <span class="keyword">return</span> reList</span><br></pre></td></tr></table></figure>
-<p>执行用时：3672 ms, 在所有 Python 提交中击败了14.63% 的用户<br>内存消耗：13.6 MB, 在所有 Python 提交中击败了6.17% 的用户</p>
-<hr>
-<h3 id="第二版答案"><a href="#第二版答案" class="headerlink" title="第二版答案"></a>第二版答案</h3><h4 id="改进原因：因为上面的时间复杂度是O-n-2-不满意"><a href="#改进原因：因为上面的时间复杂度是O-n-2-不满意" class="headerlink" title="改进原因：因为上面的时间复杂度是O(n^2),不满意"></a>改进原因：因为上面的时间复杂度是O(n^2),不满意</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:</span><br><span class="line">        reList &#x3D; set()</span><br><span class="line">        nums2&#x3D;nums</span><br><span class="line">        for k,v in enumerate(nums):</span><br><span class="line">                nums2[k]&#x3D;&#39;A&#39;</span><br><span class="line">                if target-v in nums2  :</span><br><span class="line">                    reList.add(k)    </span><br><span class="line">                nums2[k]&#x3D;v</span><br><span class="line">        reList1&#x3D;list(reList)</span><br><span class="line">        return reList1</span><br></pre></td></tr></table></figure>
-
-<p>这样也能通过，且时间复杂度为 O(n)</p>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>编程</tag>
-        <tag>Python3</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>reids单实例安装配置</title>
-    <url>/2020/07/06/reids%E5%8D%95%E5%AE%9E%E4%BE%8B%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="Redis基础"><a href="#Redis基础" class="headerlink" title="Redis基础"></a>Redis基础</h1><p>Redis是完全开源免费的，是一个高性能的<strong>key-value</strong>数据库。基于内存亦可持久化的日志型数据结构服务器。</p>
-<pre><code>* 数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加再进行使用。
-* 支持string,list,zset,hash,String,stream数据结构。
-* 支持数据的备份（主从模式）</code></pre><hr>
-<h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><p>性能及高，读速度每秒十万次，写速度每秒八万次。</p>
-<p>丰富的数据类型<em>（string,list,zset,hash,5.0加入stream）。</em></p>
-<p>所有操作均是原子性的，(单个操作是原子性，多操作也支持事务）。</p>
-<p>支持publish/subscribe，通知，key过期。</p>
-<hr>
-<a id="more"></a>
-
-
-<h2 id="与其它key-value-存储有什么不同"><a href="#与其它key-value-存储有什么不同" class="headerlink" title="与其它key-value 存储有什么不同"></a>与其它key-value 存储有什么不同</h2><p>复杂的数据结构，并提供原子操作，运行在内存中但是可以持久化到磁盘，<em>所以在对不同的数据进行高速读写时要权衡内存的大小</em> 。</p>
-<p>下载地址：<a href="http://download.redis.io/releases/redis-5.0.8.tar.gz" target="_blank" rel="noopener">Redis-5.0</a></p>
-<p>或者 <code># wget http://download.redis.io/releases/redis-5.0.8.tar.gz</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># yum -y install gcc gcc-c++ tcl</span><br><span class="line"># tar -zxvf redis-5.0.8.tar.gz -C &#x2F;usr&#x2F;local&#x2F;</span><br><span class="line"># cd &#x2F;usr&#x2F;local&#x2F;redis-5.0.8&#x2F;</span><br><span class="line"># make</span><br></pre></td></tr></table></figure>
-
-
-
-<p>报错</p>
-<p>make[1]: <strong>* [adlist.o] Error 1<br>make[1]: Leaving directory `/usr/local/redis/src’<br>make: *</strong> [install] Error 2</p>
-<p>可以通过在 src/.make-settings里的OPT=-O2后添加  -march=x86-64</p>
-<p>测试一下时间会比较长，缺软件会有提示。没有报错的话就可以下一步安装了。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># make install</span><br></pre></td></tr></table></figure>
-
-<p>此时在目录下的src里有<strong>redis-server</strong> 可以开启redis服务(可以指定配置文件)，在开启前我需要对配置文件做一些修改，方便我们一会使用。</p>
-<p>在解压的文件夹里就有其配置文件，在修改前我们先备份一下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cp redis.conf  redis.conf.bak</span><br><span class="line"># vim redis.conf</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>修改内容：</p>
-<p>#指定 redis 只接收来自于该 IP 地址的请求，如果不进行设置，那么将处理所有请求</p>
-<p>#bind 127.0.0.1</p>
-<p>#是否开启保护模式，默认开启。要是配置里没有指定bind和密码。开启该参数后，redis只会本地进行访问，拒绝外部访问。<br>protected-mode yes</p>
-<p>#是否在后台执行，yes：后台运行；no：不是后台运行<br>daemonize yes</p>
-<p>#redis监听的端口号  <strong>不要默认真的不要默认会被黑客攻击的！</strong></p>
-<p>port 63079</p>
-<p>#开启客户端密码验证</p>
-<p>requirepass  &lt;你的密码：我在这里是<em>qwer1234</em>&gt;</p>
-<p><strong>【此后会有详解配置文件的教学】</strong></p>
-</blockquote>
-<p>修改完成后就可以运行啦</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># .&#x2F;redis-server ..&#x2F;redis.conf</span><br><span class="line"># ps -ef | grep redis</span><br></pre></td></tr></table></figure>
-
-<p>其端口为<strong>63079</strong></p>
-<p>登录redis为  ****</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># .&#x2F;redis-cli -p 63079 -a &#39;qwer1234&#39;</span><br><span class="line">127.0.0.1:63079&gt; PING</span><br><span class="line">PONG</span><br></pre></td></tr></table></figure>
-
-<hr>
-]]></content>
-      <categories>
-        <category>Redis</category>
-      </categories>
-      <tags>
-        <tag>reids基础知识及其搭建</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>kubernetes搭建</title>
     <url>/2020/07/07/kubernetes%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="kuberbetes-centos"><a href="#kuberbetes-centos" class="headerlink" title="kuberbetes-centos"></a>kuberbetes-centos</h1><h2 id="centos7-8-部署-kubernetes-集群"><a href="#centos7-8-部署-kubernetes-集群" class="headerlink" title="centos7/8 部署 kubernetes 集群"></a>centos7/8 部署 kubernetes 集群</h2><h4 id="安装docker-ce"><a href="#安装docker-ce" class="headerlink" title="安装docker-ce"></a>安装docker-ce</h4><p><a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">官方文档</a></p>
 <p><strong>Master、Node节点都需要安装、配置Docker</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 卸载原来的docker</span></span><br><span class="line">sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">sudo yum update -y &amp;&amp; sudo yum install -y yum-utils \</span><br><span class="line">  device-mapper-persistent-data \</span><br><span class="line">  lvm2</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 添加官方yum库</span></span><br><span class="line">sudo yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 安装docker</span></span><br><span class="line">sudo yum install docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看docker版本</span></span><br><span class="line">docker --version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开机启动</span></span><br><span class="line">systemctl <span class="built_in">enable</span> --now docker</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 卸载原来的docker</span></span><br><span class="line">sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">sudo yum update -y &amp;&amp; sudo yum install -y yum-utils \</span><br><span class="line">  device-mapper-persistent-data \</span><br><span class="line">  lvm2</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 添加官方yum库</span></span><br><span class="line">sudo yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 安装docker</span></span><br><span class="line">sudo yum install docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看docker版本</span></span><br><span class="line">docker --version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开机启动</span></span><br><span class="line">systemctl <span class="built_in">enable</span> --now docker</span><br></pre></td></tr></table></figure>
 
 <p>或使用脚本一键安装</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun</span><br><span class="line">systemctl enable --now docker</span><br></pre></td></tr></table></figure>
@@ -188,6 +102,87 @@
       <tags>
         <tag>k8s基础知识</tag>
         <tag>k8s搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode_1俩数之和</title>
+    <url>/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
+    <content><![CDATA[<p>#问题描述：<br>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。<br>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。<br>示例:<br>给定 nums = [2, 7, 11, 15], target = 9<br>因为 nums[0] + nums[1] = 2 + 7 = 9<br>所以返回 [0, 1]</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/two-sum" target="_blank" rel="noopener">https://leetcode-cn.com/problems/two-sum</a></p>
+<a id="more"></a>
+<h3 id="第一版答案："><a href="#第一版答案：" class="headerlink" title="第一版答案："></a>第一版答案：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">twoSum</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        reList = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(nums)):</span><br><span class="line">                <span class="keyword">if</span>(nums[i]+nums[j] == target):</span><br><span class="line">                    reList.append(i)</span><br><span class="line">                    reList.append(j)    </span><br><span class="line">        <span class="keyword">return</span> reList</span><br></pre></td></tr></table></figure>
+<p>执行用时：3672 ms, 在所有 Python 提交中击败了14.63% 的用户<br>内存消耗：13.6 MB, 在所有 Python 提交中击败了6.17% 的用户</p>
+<hr>
+<h3 id="第二版答案"><a href="#第二版答案" class="headerlink" title="第二版答案"></a>第二版答案</h3><h4 id="改进原因：因为上面的时间复杂度是O-n-2-不满意"><a href="#改进原因：因为上面的时间复杂度是O-n-2-不满意" class="headerlink" title="改进原因：因为上面的时间复杂度是O(n^2),不满意"></a>改进原因：因为上面的时间复杂度是O(n^2),不满意</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:</span><br><span class="line">        reList &#x3D; set()</span><br><span class="line">        nums2&#x3D;nums</span><br><span class="line">        for k,v in enumerate(nums):</span><br><span class="line">                nums2[k]&#x3D;&#39;A&#39;</span><br><span class="line">                if target-v in nums2  :</span><br><span class="line">                    reList.add(k)    </span><br><span class="line">                nums2[k]&#x3D;v</span><br><span class="line">        reList1&#x3D;list(reList)</span><br><span class="line">        return reList1</span><br></pre></td></tr></table></figure>
+
+<p>这样也能通过，且时间复杂度为 O(n)</p>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>编程</tag>
+        <tag>Python3</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>reids单实例安装配置</title>
+    <url>/2020/07/06/reids%E5%8D%95%E5%AE%9E%E4%BE%8B%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="Redis基础"><a href="#Redis基础" class="headerlink" title="Redis基础"></a>Redis基础</h1><p>Redis是完全开源免费的，是一个高性能的<strong>key-value</strong>数据库。基于内存亦可持久化的日志型数据结构服务器。</p>
+<pre><code>* 数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加再进行使用。
+* 支持string,list,zset,hash,String,stream数据结构。
+* 支持数据的备份（主从模式）</code></pre><hr>
+<a id="more"></a>
+
+<h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><p>性能及高，读速度每秒十万次，写速度每秒八万次。</p>
+<p>丰富的数据类型<em>（string,list,zset,hash,5.0加入stream）。</em></p>
+<p>所有操作均是原子性的，(单个操作是原子性，多操作也支持事务）。</p>
+<p>支持publish/subscribe，通知，key过期。</p>
+<hr>
+<h2 id="与其它key-value-存储有什么不同"><a href="#与其它key-value-存储有什么不同" class="headerlink" title="与其它key-value 存储有什么不同"></a>与其它key-value 存储有什么不同</h2><p>复杂的数据结构，并提供原子操作，运行在内存中但是可以持久化到磁盘，<em>所以在对不同的数据进行高速读写时要权衡内存的大小</em> 。</p>
+<p>下载地址：<a href="http://download.redis.io/releases/redis-5.0.8.tar.gz" target="_blank" rel="noopener">Redis-5.0</a></p>
+<p>或者 <code># wget http://download.redis.io/releases/redis-5.0.8.tar.gz</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># yum -y install gcc gcc-c++ tcl</span><br><span class="line"># tar -zxvf redis-5.0.8.tar.gz -C &#x2F;usr&#x2F;local&#x2F;</span><br><span class="line"># cd &#x2F;usr&#x2F;local&#x2F;redis-5.0.8&#x2F;</span><br><span class="line"># make</span><br></pre></td></tr></table></figure>
+
+
+
+<p>报错</p>
+<p>make[1]: <strong>* [adlist.o] Error 1<br>make[1]: Leaving directory `/usr/local/redis/src’<br>make: *</strong> [install] Error 2</p>
+<p>可以通过在 src/.make-settings里的OPT=-O2后添加  -march=x86-64</p>
+<p>测试一下时间会比较长，缺软件会有提示。没有报错的话就可以下一步安装了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># make install</span><br></pre></td></tr></table></figure>
+
+<p>此时在目录下的src里有<strong>redis-server</strong> 可以开启redis服务(可以指定配置文件)，在开启前我需要对配置文件做一些修改，方便我们一会使用。</p>
+<p>在解压的文件夹里就有其配置文件，在修改前我们先备份一下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cp redis.conf  redis.conf.bak</span><br><span class="line"># vim redis.conf</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改内容：</p>
+<p>#指定 redis 只接收来自于该 IP 地址的请求，如果不进行设置，那么将处理所有请求</p>
+<p>#bind 127.0.0.1</p>
+<p>#是否开启保护模式，默认开启。要是配置里没有指定bind和密码。开启该参数后，redis只会本地进行访问，拒绝外部访问。<br>protected-mode yes</p>
+<p>#是否在后台执行，yes：后台运行；no：不是后台运行<br>daemonize yes</p>
+<p>#redis监听的端口号  <strong>不要默认真的不要默认会被黑客攻击的！</strong></p>
+<p>port 63079</p>
+<p>#开启客户端密码验证</p>
+<p>requirepass  &lt;你的密码：我在这里是<em>qwer1234</em>&gt;</p>
+<p><strong>【此后会有详解配置文件的教学】</strong></p>
+</blockquote>
+<p>修改完成后就可以运行啦</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># .&#x2F;redis-server ..&#x2F;redis.conf</span><br><span class="line"># ps -ef | grep redis</span><br></pre></td></tr></table></figure>
+
+<p>其端口为<strong>63079</strong></p>
+<p>登录redis为  ****</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># .&#x2F;redis-cli -p 63079 -a &#39;qwer1234&#39;</span><br><span class="line">127.0.0.1:63079&gt; PING</span><br><span class="line">PONG</span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>reids基础知识及其搭建</tag>
       </tags>
   </entry>
   <entry>
@@ -307,5 +302,11 @@
         <tag>FTP搭建</tag>
         <tag>FTP自定义用户</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>瀚中子</title>
+    <url>/2020/07/06/hello-world/</url>
+    <content><![CDATA[<p>欢迎欢迎，热烈欢迎<br>记录学习，分想知识</p>
+]]></content>
   </entry>
 </search>
