@@ -197,7 +197,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-22 15:07:02" itemprop="dateModified" datetime="2020-07-22T15:07:02+08:00">2020-07-22</time>
+                <time title="修改时间：2020-07-22 15:16:15" itemprop="dateModified" datetime="2020-07-22T15:16:15+08:00">2020-07-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -237,17 +237,6 @@
 <p>21：用于传输控制信息</p>
 <p>被动模式传输数据的端口试服务器与客户端协商</p>
 </blockquote>
-<h3 id="工作方式："><a href="#工作方式：" class="headerlink" title="工作方式："></a>工作方式：</h3><h5 id="一、Standard-主动模式-Port"><a href="#一、Standard-主动模式-Port" class="headerlink" title="一、Standard   主动模式 Port"></a>一、Standard   主动模式 Port</h5><blockquote>
-<p>1.<code>client:随机端口</code> 发送消息与 <code>server:21</code> 建立连接发送Port命令</p>
-<p>2.客户端需要接受数据时通过上面的链接发送自己定义的就收数据端口</p>
-<p>3.服务器接受命令后，使用20端口链接至指定端口，建立新连接传输数据</p>
-</blockquote>
-<h5 id="二、Passive-被动模式"><a href="#二、Passive-被动模式" class="headerlink" title="二、Passive   被动模式"></a>二、Passive   被动模式</h5><blockquote>
-<p>1.<code>client:随机端口</code> 发送消息与 <code>server:21</code> 建立连接发送Pasv命令</p>
-<p>2.服务器收到Pasv命令后随机打开一个端口<code>A</code> 并通知客户端这个端口上有传送数据请求</p>
-<p>3.客户端链接FTP的<code>A</code>端口，三次握手后进行数据传输</p>
-</blockquote>
-<p>一般有防火墙，在防火墙外时Pasv不通</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/#more" rel="contents">
