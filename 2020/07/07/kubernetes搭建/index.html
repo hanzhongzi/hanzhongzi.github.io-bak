@@ -28,7 +28,7 @@
 <meta property="og:description" content="kuberbetes-centoscentos7&#x2F;8 部署 kubernetes 集群安装docker-ce官方文档 Master、Node节点都需要安装、配置Docker">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-07T08:46:48.000Z">
-<meta property="article:modified_time" content="2020-07-22T08:10:55.685Z">
+<meta property="article:modified_time" content="2020-07-28T06:04:29.827Z">
 <meta property="article:author" content="瀚中子">
 <meta property="article:tag" content="k8s基础知识">
 <meta property="article:tag" content="k8s搭建">
@@ -199,7 +199,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-22 16:10:55" itemprop="dateModified" datetime="2020-07-22T16:10:55+08:00">2020-07-22</time>
+                <time title="修改时间：2020-07-28 14:04:29" itemprop="dateModified" datetime="2020-07-28T14:04:29+08:00">2020-07-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -235,8 +235,10 @@
 <p><strong>修改docker cgroup驱动，与k8s一致，使用systemd</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改docker cgroup驱动：native.cgroupdriver=systemd</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 注意不要将原来配置的加速下载给删除了</span></span><br><span class="line">vim  /etc/docker/daemon.json </span><br><span class="line">&#123;</span><br><span class="line">  "exec-opts": ["native.cgroupdriver=systemd"],</span><br><span class="line">  "log-driver": "json-file",</span><br><span class="line">  "log-opts": &#123;</span><br><span class="line">    "max-size": "100m"</span><br><span class="line">  &#125;,</span><br><span class="line">  "storage-driver": "overlay2",</span><br><span class="line">  "storage-opts": [</span><br><span class="line">    "overlay2.override_kernel_check=true"</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">systemctl restart docker  # 重启使配置生效</span><br></pre></td></tr></table></figure>
 
-
-
+<hr>
+<h3 id="安装ipvsadm"><a href="#安装ipvsadm" class="headerlink" title="安装ipvsadm"></a>安装ipvsadm</h3><p>cat &gt; /etc/sysconfig/modules/ipvs.modules &lt;&lt;EOF<br>#!/bin/bash<br>modprobe – ip_vs<br>modprobe – ip_vs_rr<br>modprobe – ip_vs_wrr<br>modprobe – ip_vs_sh<br>modprobe – nf_conntrack_ipv4<br>EOF<br>chmod 755 /etc/sysconfig/modules/ipvs.modules &amp;&amp; bash /etc/sysconfig/modules/ipvs.modules &amp;&amp; lsmod | grep -e ip_vs -e nf_conntrack_ipv4</p>
+<p>yum install -y ipset ipvsadm</p>
+<hr>
 <h3 id="安装-kubelet-kubeadm-kubectl"><a href="#安装-kubelet-kubeadm-kubectl" class="headerlink" title="安装 kubelet kubeadm kubectl"></a>安装 kubelet kubeadm kubectl</h3><p><a href="https://kubernetes.io/docs/setup/independent/install-kubeadm/" target="_blank" rel="noopener">官方文档</a></p>
 <p><strong>master、node节点都需要安装kubelet kubeadm kubectl。</strong></p>
 <p><strong>安装kubernetes的时候，需要安装kubelet, kubeadm等包，但k8s官网给的yum源是packages.cloud.google.com，国内访问不了，此时我们可以使用阿里云的yum仓库镜像。</strong></p>
@@ -354,7 +356,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#kuberbetes-centos"><span class="nav-number">1.</span> <span class="nav-text">kuberbetes-centos</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#centos7-8-部署-kubernetes-集群"><span class="nav-number">1.1.</span> <span class="nav-text">centos7&#x2F;8 部署 kubernetes 集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装docker-ce"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">安装docker-ce</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-kubelet-kubeadm-kubectl"><span class="nav-number">1.1.1.</span> <span class="nav-text">安装 kubelet kubeadm kubectl</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建集群准备工作"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">创建集群准备工作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用kubeadm创建集群"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用kubeadm创建集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通用户设置权限"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">普通用户设置权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master运行应用flannel网络"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">master运行应用flannel网络</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node加入机器，就是复制刚才记录初始化的输出信息"><span class="nav-number">1.1.3.</span> <span class="nav-text">node加入机器，就是复制刚才记录初始化的输出信息</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#kuberbetes-centos"><span class="nav-number">1.</span> <span class="nav-text">kuberbetes-centos</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#centos7-8-部署-kubernetes-集群"><span class="nav-number">1.1.</span> <span class="nav-text">centos7&#x2F;8 部署 kubernetes 集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装docker-ce"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">安装docker-ce</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装ipvsadm"><span class="nav-number">1.1.1.</span> <span class="nav-text">安装ipvsadm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-kubelet-kubeadm-kubectl"><span class="nav-number">1.1.2.</span> <span class="nav-text">安装 kubelet kubeadm kubectl</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建集群准备工作"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">创建集群准备工作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用kubeadm创建集群"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用kubeadm创建集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通用户设置权限"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">普通用户设置权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master运行应用flannel网络"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">master运行应用flannel网络</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node加入机器，就是复制刚才记录初始化的输出信息"><span class="nav-number">1.1.4.</span> <span class="nav-text">node加入机器，就是复制刚才记录初始化的输出信息</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
