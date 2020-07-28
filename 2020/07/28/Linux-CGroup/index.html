@@ -27,15 +27,15 @@
 <meta property="og:site_name" content="Linux高级运维工程师之路">
 <meta property="og:description" content="Linux CGroup （一）Linux Control Group是在一个系统中运行的层级制进程组，是linux内核的一个功能。用来限制、控制与分离一个进程组群的资源（如CPU、内存、磁盘输入输出等） 可以为系统中运行的任务进程定义组群分配资源，比如CPU时间、系统内存、网络带宽或者这些资源的组合。并且可以监控配置cgroup、拒绝cgroup访问某些资源、可以在运行的系统中动态配置。 主要功">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/cpu_test_sh.JPG">
-<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/quota.JPG">
-<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/quota2.JPG">
+<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/images/cpu_test_sh.JPG">
+<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/images/quota.JPG">
+<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/images/quota2.JPG">
 <meta property="article:published_time" content="2020-07-28T05:34:43.000Z">
-<meta property="article:modified_time" content="2020-07-28T05:37:49.028Z">
+<meta property="article:modified_time" content="2020-07-28T05:41:43.785Z">
 <meta property="article:author" content="瀚中子">
 <meta property="article:tag" content="CGroup">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/cpu_test_sh.JPG">
+<meta name="twitter:image" content="http://127.0.0.1:8080/2020/07/28/images/cpu_test_sh.JPG">
 
 <link rel="canonical" href="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/">
 
@@ -196,7 +196,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-07-28 13:34:43 / 修改时间：13:37:49" itemprop="dateCreated datePublished" datetime="2020-07-28T13:34:43+08:00">2020-07-28</time>
+              <time title="创建时间：2020-07-28 13:34:43 / 修改时间：13:41:43" itemprop="dateCreated datePublished" datetime="2020-07-28T13:34:43+08:00">2020-07-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -233,15 +233,15 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@xxx cgroup]# ll</span><br><span class="line">total 0</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 blkio #限制进程的块设备IO</span><br><span class="line">lrwxrwxrwx 1 root root 11 Jun 29 00:33 cpu -&gt; cpu,cpuacct #限制进程的CPU使用率</span><br><span class="line">lrwxrwxrwx 1 root root 11 Jun 29 00:33 cpuacct -&gt; cpu,cpuacct #统计cpu使用报告</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 cpu,cpuacct </span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 cpuset #可以为cgroups中的进程分配单独的cpu节点或者内存节点</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 devices #可以控制进程能够访问某些设备</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 freezer #可以挂起或者恢复 cgroups 中的进程</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 hugetlb #这个子系统主要针对于HugeTLB系统进行限制，这是一个大页文件系统</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 memory #可以限制进程的 memory 使用量</span><br><span class="line">lrwxrwxrwx 1 root root 16 Jun 29 00:33 net_cls -&gt; net_cls,net_prio #可以标记 cgroups 中进程的网络数据包，然后可以使用 tc 模块（traffic control）对数据包进行控制。</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 net_cls,net_prio </span><br><span class="line">lrwxrwxrwx 1 root root 16 Jun 29 00:33 net_prio -&gt; net_cls,net_prio # 这个子系统用来设计网络流量的优先级</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 perf_event</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 pids</span><br><span class="line">dr-xr-xr-x 2 root root  0 Jun 29 00:33 rdma</span><br><span class="line">dr-xr-xr-x 7 root root  0 Jun 29 00:33 systemd</span><br></pre></td></tr></table></figure>
 
 <h4 id="接下来演示一下如何限制进程CPU使用率"><a href="#接下来演示一下如何限制进程CPU使用率" class="headerlink" title="接下来演示一下如何限制进程CPU使用率"></a>接下来演示一下如何限制进程CPU使用率</h4><p>我们先跑起来一个进程，让它做死循环占用cpu资源</p>
-<p><img src="./cpu_test_sh.JPG" alt="进程截图"></p>
+<p><img src="../images/cpu_test_sh.JPG" alt="进程截图"></p>
 <p>新建一个cgroup组，进入到/sys/fs/cgroup/cpu新建一个名为cpu_test的子控制组，其目录下会自动生成一些文件。</p>
 <p>我们通过</p>
 <p><code>echo 1000 &gt; cpu.cfs_quota_us</code>限制该控制组的cpu利用率为1%</p>
 <p><code>echo 15145 &gt; cgroup.procs</code>  将我们运行的进程放入到此Cgroup中</p>
 <p>此时会发现这个进程的cpu使用率立马会降下来</p>
-<p><img src="./quota.JPG" alt="quota"></p>
+<p><img src="../images/quota.JPG" alt="quota"></p>
 <p>也可以限制在10%</p>
-<p><img src="./quota2.JPG" alt="quto2"></p>
+<p><img src="../images/quota2.JPG" alt="quto2"></p>
 <h4 id="自己新建的Cgroup后-自动生成的文件解释"><a href="#自己新建的Cgroup后-自动生成的文件解释" class="headerlink" title="自己新建的Cgroup后 自动生成的文件解释"></a>自己新建的Cgroup后 自动生成的文件解释</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-48-15-centos cpu_test]# ll</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cgroup.clone_children </span><br><span class="line">--w--w--w- 1 root root 0 Jul 28 11:28 cgroup.event_control</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:29 cgroup.procs</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpuacct.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpuacct.usage</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpuacct.usage_percpu</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.cfs_period_us #统计CPU使用时间的周期，单位是微秒（us） </span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:37 cpu.cfs_quota_us #周期内允许占用的CPU时间(指单核的时间，多核则需要在设置时累加) </span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.rt_period_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.rt_runtime_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.shares</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpu.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 notify_on_release</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 tasks</span><br></pre></td></tr></table></figure>
 
 
