@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux_CGroup</title>
+    <url>/2020/07/28/Linux-CGroup/</url>
+    <content><![CDATA[<h2 id="Linux-CGroup-（一）"><a href="#Linux-CGroup-（一）" class="headerlink" title="Linux CGroup （一）"></a>Linux CGroup （一）</h2><p><code>Linux Control Group</code>是在一个系统中运行的层级制进程组，是linux内核的一个功能。用来限制、控制与分离一个进程组群的资源（如CPU、内存、磁盘输入输出等）</p>
+<p>可以为系统中运行的任务进程定义组群分配资源，比如CPU时间、系统内存、网络带宽或者这些资源的组合。并且可以监控配置cgroup、拒绝cgroup访问某些资源、可以在运行的系统中动态配置。</p>
+<h4 id="主要功能："><a href="#主要功能：" class="headerlink" title="主要功能："></a>主要功能：</h4><p>限制资源使用、内存使用上限以及文件系统的缓存限制</p>
+<p>优先级控制、CPU利用率和磁盘IO吞吐</p>
+<a id="more"></a>
+
+<p>一些审计或一些统计，为计费用！！！！</p>
+<p>挂起进程，恢复执行进程</p>
+<h4 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h4><p>查看某进程属于某cgroup</p>
+<p><code>cat /proc/&lt;PID&gt;/cgroup</code></p>
+<p>位置：/sys/fs/cgroup</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@xxx cgroup]# ll</span><br><span class="line">total 0</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 blkio #限制进程的块设备IO</span><br><span class="line">lrwxrwxrwx 1 root root 11 Jun 29 00:33 cpu -&gt; cpu,cpuacct #限制进程的CPU使用率</span><br><span class="line">lrwxrwxrwx 1 root root 11 Jun 29 00:33 cpuacct -&gt; cpu,cpuacct #统计cpu使用报告</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 cpu,cpuacct </span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 cpuset #可以为cgroups中的进程分配单独的cpu节点或者内存节点</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 devices #可以控制进程能够访问某些设备</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 freezer #可以挂起或者恢复 cgroups 中的进程</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 hugetlb #这个子系统主要针对于HugeTLB系统进行限制，这是一个大页文件系统</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 memory #可以限制进程的 memory 使用量</span><br><span class="line">lrwxrwxrwx 1 root root 16 Jun 29 00:33 net_cls -&gt; net_cls,net_prio #可以标记 cgroups 中进程的网络数据包，然后可以使用 tc 模块（traffic control）对数据包进行控制。</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 net_cls,net_prio </span><br><span class="line">lrwxrwxrwx 1 root root 16 Jun 29 00:33 net_prio -&gt; net_cls,net_prio # 这个子系统用来设计网络流量的优先级</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 perf_event</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 pids</span><br><span class="line">dr-xr-xr-x 2 root root  0 Jun 29 00:33 rdma</span><br><span class="line">dr-xr-xr-x 7 root root  0 Jun 29 00:33 systemd</span><br></pre></td></tr></table></figure>
+
+<h4 id="接下来演示一下如何限制进程CPU使用率"><a href="#接下来演示一下如何限制进程CPU使用率" class="headerlink" title="接下来演示一下如何限制进程CPU使用率"></a>接下来演示一下如何限制进程CPU使用率</h4><p>我们先跑起来一个进程，让它做死循环占用cpu资源</p>
+<p><img src="./cpu_test_sh.JPG" alt="进程截图"></p>
+<p>新建一个cgroup组，进入到/sys/fs/cgroup/cpu新建一个名为cpu_test的子控制组，其目录下会自动生成一些文件。</p>
+<p>我们通过</p>
+<p><code>echo 1000 &gt; cpu.cfs_quota_us</code>限制该控制组的cpu利用率为1%</p>
+<p><code>echo 15145 &gt; cgroup.procs</code>  将我们运行的进程放入到此Cgroup中</p>
+<p>此时会发现这个进程的cpu使用率立马会降下来</p>
+<p><img src="./quota.JPG" alt="quota"></p>
+<p>也可以限制在10%</p>
+<p><img src="./quota2.JPG" alt="quto2"></p>
+<h4 id="自己新建的Cgroup后-自动生成的文件解释"><a href="#自己新建的Cgroup后-自动生成的文件解释" class="headerlink" title="自己新建的Cgroup后 自动生成的文件解释"></a>自己新建的Cgroup后 自动生成的文件解释</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@VM-48-15-centos cpu_test]# ll</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cgroup.clone_children </span><br><span class="line">--w--w--w- 1 root root 0 Jul 28 11:28 cgroup.event_control</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:29 cgroup.procs</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpuacct.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpuacct.usage</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpuacct.usage_percpu</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.cfs_period_us #统计CPU使用时间的周期，单位是微秒（us） </span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:37 cpu.cfs_quota_us #周期内允许占用的CPU时间(指单核的时间，多核则需要在设置时累加) </span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.rt_period_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.rt_runtime_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.shares</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpu.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 notify_on_release</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 tasks</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>Linux基础服务</category>
+      </categories>
+      <tags>
+        <tag>CGroup</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>FTP基础知识与搭建指南</title>
     <url>/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<h2 id="FTP协议及FTP服务器搭建"><a href="#FTP协议及FTP服务器搭建" class="headerlink" title="FTP协议及FTP服务器搭建"></a>FTP协议及FTP服务器搭建</h2><p>File Transfer Protocol 文件传输协议 ，应用层协议—-RFC959</p>
@@ -119,6 +156,78 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode_1俩数之和</title>
+    <url>/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
+    <content><![CDATA[<p>#问题描述：<br>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。<br>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。<br>示例:<br>给定 nums = [2, 7, 11, 15], target = 9<br>因为 nums[0] + nums[1] = 2 + 7 = 9<br>所以返回 [0, 1]</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/two-sum" target="_blank" rel="noopener">https://leetcode-cn.com/problems/two-sum</a></p>
+<a id="more"></a>
+<h3 id="第一版答案："><a href="#第一版答案：" class="headerlink" title="第一版答案："></a>第一版答案：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">twoSum</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        reList = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(nums)):</span><br><span class="line">                <span class="keyword">if</span>(nums[i]+nums[j] == target):</span><br><span class="line">                    reList.append(i)</span><br><span class="line">                    reList.append(j)    </span><br><span class="line">        <span class="keyword">return</span> reList</span><br></pre></td></tr></table></figure>
+<p>执行用时：3672 ms, 在所有 Python 提交中击败了14.63% 的用户<br>内存消耗：13.6 MB, 在所有 Python 提交中击败了6.17% 的用户</p>
+<hr>
+<h3 id="第二版答案"><a href="#第二版答案" class="headerlink" title="第二版答案"></a>第二版答案</h3><h4 id="改进原因：因为上面的时间复杂度是O-n-2-不满意"><a href="#改进原因：因为上面的时间复杂度是O-n-2-不满意" class="headerlink" title="改进原因：因为上面的时间复杂度是O(n^2),不满意"></a>改进原因：因为上面的时间复杂度是O(n^2),不满意</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:</span><br><span class="line">        reList &#x3D; set()</span><br><span class="line">        nums2&#x3D;nums</span><br><span class="line">        for k,v in enumerate(nums):</span><br><span class="line">                nums2[k]&#x3D;&#39;A&#39;</span><br><span class="line">                if target-v in nums2  :</span><br><span class="line">                    reList.add(k)    </span><br><span class="line">                nums2[k]&#x3D;v</span><br><span class="line">        reList1&#x3D;list(reList)</span><br><span class="line">        return reList1</span><br></pre></td></tr></table></figure>
+
+<p>这样也能通过，且时间复杂度为 O(n)</p>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>编程</tag>
+        <tag>Python3</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>瀚中子</title>
+    <url>/2020/07/06/hello-world/</url>
+    <content><![CDATA[<p>欢迎欢迎，热烈欢迎<br>记录学习，分想知识</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>influxdb备份与还原</title>
+    <url>/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/</url>
+    <content><![CDATA[<h2 id="influxdb备份"><a href="#influxdb备份" class="headerlink" title="influxdb备份"></a>influxdb备份</h2><h3 id="备份参数说明"><a href="#备份参数说明" class="headerlink" title="备份参数说明"></a>备份参数说明</h3><p><code>influxd backup [options] PATH</code></p>
+<a id="more"></a>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-portable</span><br><span class="line">	适配格式备份模式，建议每次都启用</span><br><span class="line">-host &lt;host:port&gt;</span><br><span class="line">        默认 127.0.0.1:8088。</span><br><span class="line">-db &lt;name&gt;</span><br><span class="line">        没有特别说明数据库将备份全部数据库</span><br><span class="line">-rp &lt;name&gt;</span><br><span class="line">        不指定备份保留策略，及全备份， 如果指定，则需要-database。</span><br><span class="line">-shard &lt;id&gt;</span><br><span class="line">        指定要备份的shard ID  如果指定，那么必须指定保留策略</span><br><span class="line">-start &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        指定时间戳开始的点（RFC3339格式），不能和since连用。</span><br><span class="line">-end &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        排除指定时间戳（RFC3339格式）之后的所有结果，不能喝since连用。</span><br><span class="line">-since &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        在指定的时间戳RFC3339格式之后执行增量备份。 除非旧式备份支持需要，否则请使用-start。</span><br><span class="line">-skip-errors </span><br><span class="line">        出错忽略</span><br></pre></td></tr></table></figure>
+
+<p>备份的数据在指定的目录中生产压缩包，文件名在创建时包括UTC时间戳记</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p><strong>备份所有内容</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">influxd backup -portable &lt;PATH&gt;</span><br></pre></td></tr></table></figure>
+
+<p>脚本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'start: '</span>`date` &gt; recordbackup.txt</span><br><span class="line">nohup influxd backup -portable influxd-all.back&amp;</span><br><span class="line"><span class="built_in">wait</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end: '</span>`date` &gt;&gt; recordbackup.txt</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>备份某时间点开始到现在的数据</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">influxd backup -portable -start &lt;timestamp&gt; &lt;path-to-backup&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><strong>备份某数据库中的数据</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">influxd backup -portable -database 数据库名称 &lt;path-to-backup&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="特别说明"><a href="#特别说明" class="headerlink" title="特别说明"></a>特别说明</h3><p>可以远程备份，但默认从127.0.0.1:8088 备份数据到本机。</p>
+<p><strong>backup 会忽略WAL文件和内存中的缓存数据。</strong></p>
+<hr>
+<h2 id="influxdb-数据还原"><a href="#influxdb-数据还原" class="headerlink" title="influxdb 数据还原"></a>influxdb 数据还原</h2><p>可以在线还原，还原前数据还再，如果离线还原将导致数据丢失。因为它清除服务器上所有现有的数据库。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> -portable </span><br><span class="line">        使用兼容的格式恢复数据</span><br><span class="line"> -host  &lt;host:port&gt;</span><br><span class="line">         默认&#39;127.0.0.1:8088&#39;.</span><br><span class="line"> -db    &lt;name&gt;</span><br><span class="line"> 		要从备份还原的数据库的名称。 如果未指定，将还原所有数据库。</span><br><span class="line"> -newdb &lt;name&gt;</span><br><span class="line">         将导入存档数据的数据库的名称。 如果未指定，则使用-db的值。 新的数据库名称对于目标系统必须是唯一的。</span><br><span class="line"> -rp    &lt;name&gt;</span><br><span class="line">         要还原的备份中保留策略的名称。 要求设置-db。 如果未指定，将使用所有保留策略。</span><br><span class="line"> -newrp &lt;name&gt;</span><br><span class="line">         要还原的备份中保留策略的名称。 要求设置-rp如果未指定，将使用所有保留策略。</span><br><span class="line"> -shard &lt;id&gt;</span><br><span class="line">要还原的分片的分片ID。 如果指定，则需要-db和-rp。</span><br><span class="line"> PATH</span><br><span class="line">         我存储的策略</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>influxdb</category>
+      </categories>
+      <tags>
+        <tag>influxdb备份与还原</tag>
+        <tag>influxd backup</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>kubernetes搭建</title>
     <url>/2020/07/07/kubernetes%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="kuberbetes-centos"><a href="#kuberbetes-centos" class="headerlink" title="kuberbetes-centos"></a>kuberbetes-centos</h1><h2 id="centos7-8-部署-kubernetes-集群"><a href="#centos7-8-部署-kubernetes-集群" class="headerlink" title="centos7/8 部署 kubernetes 集群"></a>centos7/8 部署 kubernetes 集群</h2><h4 id="安装docker-ce"><a href="#安装docker-ce" class="headerlink" title="安装docker-ce"></a>安装docker-ce</h4><p><a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">官方文档</a></p>
@@ -177,78 +286,6 @@
         <tag>k8s基础知识</tag>
         <tag>k8s搭建</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>leetcode_1俩数之和</title>
-    <url>/2020/07/07/leetcode-1%E4%BF%A9%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
-    <content><![CDATA[<p>#问题描述：<br>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。<br>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。<br>示例:<br>给定 nums = [2, 7, 11, 15], target = 9<br>因为 nums[0] + nums[1] = 2 + 7 = 9<br>所以返回 [0, 1]</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/two-sum" target="_blank" rel="noopener">https://leetcode-cn.com/problems/two-sum</a></p>
-<a id="more"></a>
-<h3 id="第一版答案："><a href="#第一版答案：" class="headerlink" title="第一版答案："></a>第一版答案：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">twoSum</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        reList = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(nums)):</span><br><span class="line">                <span class="keyword">if</span>(nums[i]+nums[j] == target):</span><br><span class="line">                    reList.append(i)</span><br><span class="line">                    reList.append(j)    </span><br><span class="line">        <span class="keyword">return</span> reList</span><br></pre></td></tr></table></figure>
-<p>执行用时：3672 ms, 在所有 Python 提交中击败了14.63% 的用户<br>内存消耗：13.6 MB, 在所有 Python 提交中击败了6.17% 的用户</p>
-<hr>
-<h3 id="第二版答案"><a href="#第二版答案" class="headerlink" title="第二版答案"></a>第二版答案</h3><h4 id="改进原因：因为上面的时间复杂度是O-n-2-不满意"><a href="#改进原因：因为上面的时间复杂度是O-n-2-不满意" class="headerlink" title="改进原因：因为上面的时间复杂度是O(n^2),不满意"></a>改进原因：因为上面的时间复杂度是O(n^2),不满意</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:</span><br><span class="line">        reList &#x3D; set()</span><br><span class="line">        nums2&#x3D;nums</span><br><span class="line">        for k,v in enumerate(nums):</span><br><span class="line">                nums2[k]&#x3D;&#39;A&#39;</span><br><span class="line">                if target-v in nums2  :</span><br><span class="line">                    reList.add(k)    </span><br><span class="line">                nums2[k]&#x3D;v</span><br><span class="line">        reList1&#x3D;list(reList)</span><br><span class="line">        return reList1</span><br></pre></td></tr></table></figure>
-
-<p>这样也能通过，且时间复杂度为 O(n)</p>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>编程</tag>
-        <tag>Python3</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>influxdb备份与还原</title>
-    <url>/2020/07/15/influxdb%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/</url>
-    <content><![CDATA[<h2 id="influxdb备份"><a href="#influxdb备份" class="headerlink" title="influxdb备份"></a>influxdb备份</h2><h3 id="备份参数说明"><a href="#备份参数说明" class="headerlink" title="备份参数说明"></a>备份参数说明</h3><p><code>influxd backup [options] PATH</code></p>
-<a id="more"></a>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-portable</span><br><span class="line">	适配格式备份模式，建议每次都启用</span><br><span class="line">-host &lt;host:port&gt;</span><br><span class="line">        默认 127.0.0.1:8088。</span><br><span class="line">-db &lt;name&gt;</span><br><span class="line">        没有特别说明数据库将备份全部数据库</span><br><span class="line">-rp &lt;name&gt;</span><br><span class="line">        不指定备份保留策略，及全备份， 如果指定，则需要-database。</span><br><span class="line">-shard &lt;id&gt;</span><br><span class="line">        指定要备份的shard ID  如果指定，那么必须指定保留策略</span><br><span class="line">-start &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        指定时间戳开始的点（RFC3339格式），不能和since连用。</span><br><span class="line">-end &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        排除指定时间戳（RFC3339格式）之后的所有结果，不能喝since连用。</span><br><span class="line">-since &lt;2015-12-24T08:12:23Z&gt;</span><br><span class="line">        在指定的时间戳RFC3339格式之后执行增量备份。 除非旧式备份支持需要，否则请使用-start。</span><br><span class="line">-skip-errors </span><br><span class="line">        出错忽略</span><br></pre></td></tr></table></figure>
-
-<p>备份的数据在指定的目录中生产压缩包，文件名在创建时包括UTC时间戳记</p>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p><strong>备份所有内容</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">influxd backup -portable &lt;PATH&gt;</span><br></pre></td></tr></table></figure>
-
-<p>脚本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'start: '</span>`date` &gt; recordbackup.txt</span><br><span class="line">nohup influxd backup -portable influxd-all.back&amp;</span><br><span class="line"><span class="built_in">wait</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end: '</span>`date` &gt;&gt; recordbackup.txt</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>备份某时间点开始到现在的数据</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">influxd backup -portable -start &lt;timestamp&gt; &lt;path-to-backup&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p><strong>备份某数据库中的数据</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">influxd backup -portable -database 数据库名称 &lt;path-to-backup&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="特别说明"><a href="#特别说明" class="headerlink" title="特别说明"></a>特别说明</h3><p>可以远程备份，但默认从127.0.0.1:8088 备份数据到本机。</p>
-<p><strong>backup 会忽略WAL文件和内存中的缓存数据。</strong></p>
-<hr>
-<h2 id="influxdb-数据还原"><a href="#influxdb-数据还原" class="headerlink" title="influxdb 数据还原"></a>influxdb 数据还原</h2><p>可以在线还原，还原前数据还再，如果离线还原将导致数据丢失。因为它清除服务器上所有现有的数据库。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> -portable </span><br><span class="line">        使用兼容的格式恢复数据</span><br><span class="line"> -host  &lt;host:port&gt;</span><br><span class="line">         默认&#39;127.0.0.1:8088&#39;.</span><br><span class="line"> -db    &lt;name&gt;</span><br><span class="line"> 		要从备份还原的数据库的名称。 如果未指定，将还原所有数据库。</span><br><span class="line"> -newdb &lt;name&gt;</span><br><span class="line">         将导入存档数据的数据库的名称。 如果未指定，则使用-db的值。 新的数据库名称对于目标系统必须是唯一的。</span><br><span class="line"> -rp    &lt;name&gt;</span><br><span class="line">         要还原的备份中保留策略的名称。 要求设置-db。 如果未指定，将使用所有保留策略。</span><br><span class="line"> -newrp &lt;name&gt;</span><br><span class="line">         要还原的备份中保留策略的名称。 要求设置-rp如果未指定，将使用所有保留策略。</span><br><span class="line"> -shard &lt;id&gt;</span><br><span class="line">要还原的分片的分片ID。 如果指定，则需要-db和-rp。</span><br><span class="line"> PATH</span><br><span class="line">         我存储的策略</span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>influxdb</category>
-      </categories>
-      <tags>
-        <tag>influxdb备份与还原</tag>
-        <tag>influxd backup</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>瀚中子</title>
-    <url>/2020/07/06/hello-world/</url>
-    <content><![CDATA[<p>欢迎欢迎，热烈欢迎<br>记录学习，分想知识</p>
-]]></content>
   </entry>
   <entry>
     <title>reids单实例安装配置</title>

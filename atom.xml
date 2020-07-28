@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://127.0.0.1:8080/"/>
-  <updated>2020-07-22T07:43:38.853Z</updated>
+  <updated>2020-07-28T05:37:49.028Z</updated>
   <id>http://127.0.0.1:8080/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux_CGroup</title>
+    <link href="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/"/>
+    <id>http://127.0.0.1:8080/2020/07/28/Linux-CGroup/</id>
+    <published>2020-07-28T05:34:43.000Z</published>
+    <updated>2020-07-28T05:37:49.028Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Linux-CGroup-（一）&quot;&gt;&lt;a href=&quot;#Linux-CGroup-（一）&quot; class=&quot;headerlink&quot; title=&quot;Linux CGroup （一）&quot;&gt;&lt;/a&gt;Linux CGroup （一）&lt;/h2&gt;&lt;p&gt;&lt;code&gt;Linux Control Group&lt;/code&gt;是在一个系统中运行的层级制进程组，是linux内核的一个功能。用来限制、控制与分离一个进程组群的资源（如CPU、内存、磁盘输入输出等）&lt;/p&gt;
+&lt;p&gt;可以为系统中运行的任务进程定义组群分配资源，比如CPU时间、系统内存、网络带宽或者这些资源的组合。并且可以监控配置cgroup、拒绝cgroup访问某些资源、可以在运行的系统中动态配置。&lt;/p&gt;
+&lt;h4 id=&quot;主要功能：&quot;&gt;&lt;a href=&quot;#主要功能：&quot; class=&quot;headerlink&quot; title=&quot;主要功能：&quot;&gt;&lt;/a&gt;主要功能：&lt;/h4&gt;&lt;p&gt;限制资源使用、内存使用上限以及文件系统的缓存限制&lt;/p&gt;
+&lt;p&gt;优先级控制、CPU利用率和磁盘IO吞吐&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux基础服务" scheme="http://127.0.0.1:8080/categories/Linux%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/"/>
+    
+    
+      <category term="CGroup" scheme="http://127.0.0.1:8080/tags/CGroup/"/>
+    
+  </entry>
   
   <entry>
     <title>FTP基础知识与搭建指南</title>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"127.0.0.1","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Linux CGroup （一）Linux Control Group是在一个系统中运行的层级制进程组，是linux内核的一个功能。用来限制、控制与分离一个进程组群的资源（如CPU、内存、磁盘输入输出等） 可以为系统中运行的任务进程定义组群分配资源，比如CPU时间、系统内存、网络带宽或者这些资源的组合。并且可以监控配置cgroup、拒绝cgroup访问某些资源、可以在运行的系统中动态配置。 主要功">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux_CGroup">
+<meta property="og:url" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/index.html">
+<meta property="og:site_name" content="Linux高级运维工程师之路">
+<meta property="og:description" content="Linux CGroup （一）Linux Control Group是在一个系统中运行的层级制进程组，是linux内核的一个功能。用来限制、控制与分离一个进程组群的资源（如CPU、内存、磁盘输入输出等） 可以为系统中运行的任务进程定义组群分配资源，比如CPU时间、系统内存、网络带宽或者这些资源的组合。并且可以监控配置cgroup、拒绝cgroup访问某些资源、可以在运行的系统中动态配置。 主要功">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/cpu_test_sh.JPG">
+<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/quota.JPG">
+<meta property="og:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/quota2.JPG">
+<meta property="article:published_time" content="2020-07-28T05:34:43.000Z">
+<meta property="article:modified_time" content="2020-07-28T05:37:49.028Z">
+<meta property="article:author" content="瀚中子">
+<meta property="article:tag" content="CGroup">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/cpu_test_sh.JPG">
+
+<link rel="canonical" href="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux_CGroup | Linux高级运维工程师之路</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Linux高级运维工程师之路" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Linux高级运维工程师之路</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">云毕业的瀚中子</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://127.0.0.1:8080/2020/07/28/Linux-CGroup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="瀚中子">
+      <meta itemprop="description" content="hanzhongiscoolboy@163.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linux高级运维工程师之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux_CGroup
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-28 13:34:43 / 修改时间：13:37:49" itemprop="dateCreated datePublished" datetime="2020-07-28T13:34:43+08:00">2020-07-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">Linux基础服务</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Linux-CGroup-（一）"><a href="#Linux-CGroup-（一）" class="headerlink" title="Linux CGroup （一）"></a>Linux CGroup （一）</h2><p><code>Linux Control Group</code>是在一个系统中运行的层级制进程组，是linux内核的一个功能。用来限制、控制与分离一个进程组群的资源（如CPU、内存、磁盘输入输出等）</p>
+<p>可以为系统中运行的任务进程定义组群分配资源，比如CPU时间、系统内存、网络带宽或者这些资源的组合。并且可以监控配置cgroup、拒绝cgroup访问某些资源、可以在运行的系统中动态配置。</p>
+<h4 id="主要功能："><a href="#主要功能：" class="headerlink" title="主要功能："></a>主要功能：</h4><p>限制资源使用、内存使用上限以及文件系统的缓存限制</p>
+<p>优先级控制、CPU利用率和磁盘IO吞吐</p>
+<a id="more"></a>
+
+<p>一些审计或一些统计，为计费用！！！！</p>
+<p>挂起进程，恢复执行进程</p>
+<h4 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h4><p>查看某进程属于某cgroup</p>
+<p><code>cat /proc/&lt;PID&gt;/cgroup</code></p>
+<p>位置：/sys/fs/cgroup</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@xxx cgroup]# ll</span><br><span class="line">total 0</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 blkio #限制进程的块设备IO</span><br><span class="line">lrwxrwxrwx 1 root root 11 Jun 29 00:33 cpu -&gt; cpu,cpuacct #限制进程的CPU使用率</span><br><span class="line">lrwxrwxrwx 1 root root 11 Jun 29 00:33 cpuacct -&gt; cpu,cpuacct #统计cpu使用报告</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 cpu,cpuacct </span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 cpuset #可以为cgroups中的进程分配单独的cpu节点或者内存节点</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 devices #可以控制进程能够访问某些设备</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 freezer #可以挂起或者恢复 cgroups 中的进程</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 hugetlb #这个子系统主要针对于HugeTLB系统进行限制，这是一个大页文件系统</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 memory #可以限制进程的 memory 使用量</span><br><span class="line">lrwxrwxrwx 1 root root 16 Jun 29 00:33 net_cls -&gt; net_cls,net_prio #可以标记 cgroups 中进程的网络数据包，然后可以使用 tc 模块（traffic control）对数据包进行控制。</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 net_cls,net_prio </span><br><span class="line">lrwxrwxrwx 1 root root 16 Jun 29 00:33 net_prio -&gt; net_cls,net_prio # 这个子系统用来设计网络流量的优先级</span><br><span class="line">dr-xr-xr-x 5 root root  0 Jun 29 00:33 perf_event</span><br><span class="line">dr-xr-xr-x 6 root root  0 Jun 29 00:33 pids</span><br><span class="line">dr-xr-xr-x 2 root root  0 Jun 29 00:33 rdma</span><br><span class="line">dr-xr-xr-x 7 root root  0 Jun 29 00:33 systemd</span><br></pre></td></tr></table></figure>
+
+<h4 id="接下来演示一下如何限制进程CPU使用率"><a href="#接下来演示一下如何限制进程CPU使用率" class="headerlink" title="接下来演示一下如何限制进程CPU使用率"></a>接下来演示一下如何限制进程CPU使用率</h4><p>我们先跑起来一个进程，让它做死循环占用cpu资源</p>
+<p><img src="./cpu_test_sh.JPG" alt="进程截图"></p>
+<p>新建一个cgroup组，进入到/sys/fs/cgroup/cpu新建一个名为cpu_test的子控制组，其目录下会自动生成一些文件。</p>
+<p>我们通过</p>
+<p><code>echo 1000 &gt; cpu.cfs_quota_us</code>限制该控制组的cpu利用率为1%</p>
+<p><code>echo 15145 &gt; cgroup.procs</code>  将我们运行的进程放入到此Cgroup中</p>
+<p>此时会发现这个进程的cpu使用率立马会降下来</p>
+<p><img src="./quota.JPG" alt="quota"></p>
+<p>也可以限制在10%</p>
+<p><img src="./quota2.JPG" alt="quto2"></p>
+<h4 id="自己新建的Cgroup后-自动生成的文件解释"><a href="#自己新建的Cgroup后-自动生成的文件解释" class="headerlink" title="自己新建的Cgroup后 自动生成的文件解释"></a>自己新建的Cgroup后 自动生成的文件解释</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-48-15-centos cpu_test]# ll</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cgroup.clone_children </span><br><span class="line">--w--w--w- 1 root root 0 Jul 28 11:28 cgroup.event_control</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:29 cgroup.procs</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpuacct.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpuacct.usage</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpuacct.usage_percpu</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.cfs_period_us #统计CPU使用时间的周期，单位是微秒（us） </span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:37 cpu.cfs_quota_us #周期内允许占用的CPU时间(指单核的时间，多核则需要在设置时累加) </span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.rt_period_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.rt_runtime_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 cpu.shares</span><br><span class="line">-r--r--r-- 1 root root 0 Jul 28 11:28 cpu.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 notify_on_release</span><br><span class="line">-rw-r--r-- 1 root root 0 Jul 28 11:28 tasks</span><br></pre></td></tr></table></figure>
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CGroup/" rel="tag"># CGroup</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/21/FTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97/" rel="prev" title="FTP基础知识与搭建指南">
+      <i class="fa fa-chevron-left"></i> FTP基础知识与搭建指南
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-CGroup-（一）"><span class="nav-number">1.</span> <span class="nav-text">Linux CGroup （一）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主要功能："><span class="nav-number">1.0.1.</span> <span class="nav-text">主要功能：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看"><span class="nav-number">1.0.2.</span> <span class="nav-text">查看</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接下来演示一下如何限制进程CPU使用率"><span class="nav-number">1.0.3.</span> <span class="nav-text">接下来演示一下如何限制进程CPU使用率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自己新建的Cgroup后-自动生成的文件解释"><span class="nav-number">1.0.4.</span> <span class="nav-text">自己新建的Cgroup后 自动生成的文件解释</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">瀚中子</p>
+  <div class="site-description" itemprop="description">hanzhongiscoolboy@163.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hanzhongzi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hanzhongzi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hanzhongiscoolboy@163.com" title="E-Mail → mailto:hanzhongiscoolboy@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">瀚中子</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
